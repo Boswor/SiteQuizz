@@ -2,6 +2,16 @@
 	box-sizing: border-box;
 }
 
+/* comic-relief-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Comic Relief';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./assets/fonts/comic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+
 body {
 	margin: 0;
 	background: black;
@@ -9,6 +19,18 @@ body {
 	overflow: hidden;
 }
 
+h1 {
+	font-size: 72px;
+	position: relative;
+	z-index: 2;
+	font-family: 'Comic Relief';
+	color: magenta;
+	-webkit-text-fill-color: magenta; /* Will override color (regardless of order) */
+	-webkit-text-stroke-width: 2px;
+	-webkit-text-stroke-color: #808000;
+	padding: 0 32.314159265px;
+
+}
 .hidden {
 	display: none !important;
 }
