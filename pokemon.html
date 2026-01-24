@@ -13,6 +13,7 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f9;
+            overflow: hidden;
         }
 
         header {
@@ -148,6 +149,8 @@
 
             .pokemon-card {
                 padding: 0.5rem;
+                position: relative;
+                will-change: transform;
             }
 
             .pokemon-card h2 {
@@ -206,7 +209,7 @@
         <div class="search-bar" style="display: none;">
             <select id="formFilter">
                 <option value="regular">Regular</option>
-              
+
             </select>
             <select id="generationFilter">
                 <option value="0">Custom</option>
@@ -228,8 +231,8 @@
             493: "Arceus", 483: "Dialga", 358: "Eoko", 872: "Frissonille", 680: "Dimoclès", 430: "Corboss", 121: "Staross", 472: "Scorvol", 97: "Hypnomade"
         }
 
-        function fetchPokemonData() {
-            fetch('https://raw.githubusercontent.com/Pokemon-3D-api/api-server/refs/heads/main/server/json/Merged.json')
+        async function fetchPokemonData() {
+            return fetch('https://raw.githubusercontent.com/Pokemon-3D-api/api-server/refs/heads/main/server/json/Merged.json')
                 .then(res => {
                     if (!res.ok) {
                         throw new Error('Network response was not ok');
@@ -256,7 +259,7 @@
                 if (genFilter !== 'all') {
 
                     if (generationRanges[genFilter].indexOf(pokemon.id) == -1) {
-                        return; 
+                        return;
                     }
                 }
 
@@ -308,8 +311,9 @@
                 card.appendChild(id);
 
                 const name = document.createElement('h2');
-                name.textContent = pkmnNames[pokemon.id]+ (pokemon.name.indexOf("Shiny") != -1 ? " mais en vert" : "");
+                name.textContent = pkmnNames[pokemon.id] + (pokemon.name.indexOf("Shiny") != -1 ? " mais en vert" : "");
                 card.appendChild(name);
+
 
                 pokedex.appendChild(card);
             });
@@ -319,7 +323,68 @@
         document.getElementById('searchInput').addEventListener('input', filterAndRenderPokemon);
         document.getElementById('searchButton').addEventListener('click', filterAndRenderPokemon);
 
-        fetchPokemonData();
+        fetchPokemonData().then(() => {
+            const dvds = document.querySelectorAll('.pokemon-card');
+
+            const items = [];
+            var speed = 0;
+            var deg=0;
+            var acc = 0.01;
+
+            dvds.forEach(dvd => {
+                const maxSpeedX = (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1);
+                const maxSpeedY = (Math.random() * 2 + 1) * (Math.random() < 0.5 ? -1 : 1);
+
+                items.push({
+                    wrapper: dvd,
+                    x: 0,
+                    y: 0,
+                    vx: maxSpeedX*2,
+                    vy: maxSpeedY*2,
+                    dir: Math.random() > 0.5 ? 1 : -1
+                });
+            });
+
+            function animate() {
+                if (speed < 1) {
+                    speed += acc;
+                } else {
+                    speed = 1;
+                    deg++;
+                }
+                const screenW = window.innerWidth;
+                const screenH = window.innerHeight;
+
+                items.forEach(item => {
+                    const rect = item.wrapper.getBoundingClientRect();
+
+                    item.x += item.vx*speed;
+                    item.y += item.vy*speed;
+
+                    // rebond horizontal
+                    if (rect.left + item.vx <= 0 || rect.right + item.vx >= screenW) {
+                        item.vx *= -1;
+                    }
+
+                    // rebond vertical
+                    if (rect.top + item.vy <= 0 || rect.bottom + item.vy >= screenH) {
+                        item.vy *= -1;
+                    }
+
+                    item.wrapper.style.transform = `translate(${item.x}px, ${item.y}px) rotate(${deg * item.dir}deg) rotate(${deg * item.dir}deg)`;
+
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            setTimeout(() => {
+                requestAnimationFrame(animate);
+            }, 10000);
+        });
+
+
+
     </script>
 </body>
 
