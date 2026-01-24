@@ -34,10 +34,11 @@ body {
 	cursor: pointer;
 	z-index: 2;
 	background: red;
+	border: 2px solid cyan;
 }
 
 #wish-button::after {
-	content: "FAIRE 10 VOEUX";
+	content: "FAIRE 6 VOEUX";
 	font-family: 'Times New Roman', Times, serif;
 	font-size: 3rem;
 	color: green;
@@ -144,13 +145,17 @@ body {
 
 #reveal-character::before {
 	content: "";
-	position: absolute;
+	position: fixed;
 	inset: -80px;
-	background: radial-gradient(circle, rgba(255, 215, 100, 0.6), transparent 70%);
+	background: radial-gradient(circle, rgba(255, 215, 100, 0.6), transparent 50%);
 	opacity: 0;
 	animation: goldHalo 0.5s ease-out forwards;
 	animation-delay: 1s;
 	z-index: 0;
+	left: 0;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
 }
 
 @keyframes goldHalo {
@@ -247,7 +252,7 @@ body {
 	inset: 0;
 	padding: 40px;
 	display: grid;
-	grid-template-columns: repeat(5, 1fr);
+	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: repeat(2, 1fr);
 	gap: 20px;
 	background: radial-gradient(circle, #1b2140, #090c1a);

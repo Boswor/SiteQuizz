@@ -25,16 +25,12 @@ const resultsScreen = document.getElementById("results");
 const resultCards = document.querySelectorAll(".result-card");
 
 const pulls = [
-	{ name: "Personnage 1", img: "assets/characters/char1.png" },
-	{ name: "Personnage 2", img: "assets/characters/char2.png" },
-	{ name: "Personnage 3", img: "assets/characters/char3.png" },
-	{ name: "Personnage 4", img: "assets/characters/char4.png" },
-	{ name: "Personnage 5", img: "assets/characters/char5.png" },
-	{ name: "Personnage 6", img: "assets/characters/char6.png" },
-	{ name: "Personnage 7", img: "assets/characters/char7.png" },
-	{ name: "Personnage 8", img: "assets/characters/char8.png" },
-	{ name: "Personnage 9", img: "assets/characters/char9.png" },
-	{ name: "Personnage 10", img: "assets/characters/char10.png" }
+	{ name: "Votre propre corps", img: "assets/characters/char1.png" },
+	{ name: "Une arme de mélée", img: "assets/characters/char2.png" },
+	{ name: "Une arme à distance", img: "assets/characters/char3.png" },
+	{ name: "La magiiiiiie", img: "assets/characters/char4.png" },
+	{ name: "Votre voix douce et mélodieuse et convaincante et trop pipou UwU UwU UwU", img: "assets/characters/char5.png" },
+	{ name: "Tommy Wiseau", img: "assets/characters/char6.png" },
 ];
 
 let revealIndex = 0;
