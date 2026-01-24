@@ -11,6 +11,7 @@ function playSound(name) {
 	s.play();
 }
 
+const title = document.querySelector("h1");
 const wishButton = document.getElementById("wish-button");
 const bannerScreen = document.getElementById("banner-screen");
 const wishAnimation = document.getElementById("wish-animation");
@@ -38,6 +39,7 @@ let revealIndex = 0;
 wishButton.addEventListener("click", () => {
 	playSound("click");
 	playSound("wish");
+	title.classList.add("hidden");
 	bannerScreen.classList.add("hidden");
 	wishAnimation.classList.remove("hidden");
 
