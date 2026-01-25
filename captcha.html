@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>reCAPTCHA (totalement legit)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f2f2f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .captcha {
+            background: #fff;
+            width: 340px;
+            border: 1px solid #dcdcdc;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+        }
+
+        .captcha-header {
+            background: #4285f4;
+            color: #fff;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .captcha-header strong {
+            display: block;
+            font-size: 16px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+            padding: 8px;
+            background: #e5e5e5;
+        }
+
+        .cell {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            cursor: pointer;
+            overflow: hidden;
+            background: #ccc;
+        }
+
+        .cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .cell.selected::after {
+            content: "✓";
+            position: absolute;
+            inset: 0;
+            background: rgba(66, 133, 244, .6);
+            color: #fff;
+            font-size: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .captcha-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border: 1px solid #aaa;
+            border-radius: 3px;
+            font-size: 12px;
+            gap: 10px;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fake-box {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #666;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .fake-box.loading {
+            border: unset;
+        }
+
+        .fake-box.loading::after {
+            content: "";
+            width: 12px;
+            height: 12px;
+            border: 2px solid #4285f4;
+            border-top-color: transparent;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        button {
+            background: #4285f4;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        button:hover {
+            background: #3367d6;
+        }
+
+        .result {
+            padding: 10px;
+            font-size: 13px;
+            text-align: center;
+            display: none;
+            max-width: 340px;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+            gap: 0px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="col">
+        <div class="captcha hidden">
+            <div class="captcha-header">
+                <strong>C'est l'heure de dîner en famille !</strong>
+                Sélectionnez les 3 cases qui correspondent le plus à votre programme idéal.
+            </div>
+
+            <div class="grid" id="grid">
+                <div class="cell"><img src="assets/captcha/img1.png" alt=""></div>
+                <div class="cell"><img src="assets/captcha/img2.png" alt=""></div>
+                <div class="cell"><img src="assets/captcha/img3.png" alt=""></div>
+                <div class="cell"><img src="assets/captcha/img4.png" alt=""></div>
+                <div class="cell"><img src="assets/captcha/img5.png" alt=""></div>
+                <div class="cell"><img src="assets/captcha/img6.png" alt=""></div>
+                <div class="cell"><img src="assets/captcha/img7.png" alt=""></div>
+                <div class="cell"><img src="assets/captcha/img8.png" alt=""></div>
+                <div class="cell"><img src="assets/captcha/img9.png" alt=""></div>
+            </div>
+        </div>
+
+        <div class="captcha-footer">
+            <div class="checkbox">
+                <div class="fake-box"></div>
+                <span>Je ne suis pas un robot</span>
+            </div>
+            <button id="verify">Vérifier</button>
+        </div>
+
+        <div class="result" id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const fakeBox = document.querySelector('.fake-box');
+        const captcha = document.querySelector('.captcha');
+        const grid = document.getElementById('grid');
+        const result = document.getElementById('result');
+        const verify = document.getElementById('verify');
+
+        fakeBox.addEventListener('click', () => {
+            if (fakeBox.classList.contains('loading') || fakeBox.classList.contains('checked')) return;
+
+            fakeBox.classList.add('loading');
+
+            setTimeout(() => {
+                fakeBox.classList.remove('loading');
+                fakeBox.style.borderColor = '#4285f4';
+                captcha.classList.remove('hidden');
+            }, 1000);
+        });
+
+        grid.querySelectorAll('.cell').forEach(cell => {
+            cell.addEventListener('click', () => {
+                cell.classList.toggle('selected');
+            });
+        });
+
+        verify.addEventListener('click', () => {
+            if (captcha.classList.contains('hidden')) {
+                result.style.display = 'block';
+                result.textContent = "❌ Veuillez cocher la case pour prouver que vous n'êtes pas un robot";
+                return;
+            }
+
+            const selected = grid.querySelectorAll('.cell.selected').length;
+            result.style.display = 'block';
+            if (selected == 3) {
+                result.innerHTML = "✅ La mission a échoué avec succès !<br>Envoyer une capture d'écran via Mattermost pour valider votre réponse.";
+            }else if (selected < 3) {
+                result.innerHTML = "❌ ERREUR !!!! Pas assez de cases sélectionnées :'(";
+
+            }else if (selected > 3) {
+                result.innerHTML = "❌ ERREUR !!!! Trop de cases sélectionnées >:(";
+
+            }
+        });
+    </script>
+
+</body>
+
+</html>
