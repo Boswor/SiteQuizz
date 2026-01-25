@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8" />
+	<title>Ouverture de Booster</title>
+	<style>
+		body {
+			margin: 0;
+			height: 100vh;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background: radial-gradient(circle at top, #1b1f3a, #090b18);
+			overflow: hidden;
+			font-family: sans-serif;
+		}
+
+		/* --- BOOSTER --- */
+		#booster {
+			position: relative;
+			width: 300px;
+			cursor: pointer;
+			perspective: 800px;
+			transition: transform 0.8s ease, opacity 0.8s ease;
+		}
+
+		#booster img {
+			width: 100%;
+			display: block;
+		}
+
+		#tear {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 22px;
+			background: url('./assets/booster-top.png') center/cover no-repeat;
+			transform-origin: top center;
+			transform: rotateX(0deg);
+			transition: transform 0.6s ease;
+			z-index: 2;
+			pointer-events: none;
+		}
+
+		.opened #tear {
+			transform: translateY(-180px) rotate(-12deg) scale(1.05);
+		}
+
+		.opened {
+			transform: translateY(120px) scale(0.9);
+			opacity: 0;
+		}
+
+		/* --- CARTES --- */
+		#cards {
+			position: absolute;
+			display: none;
+			width: 300px;
+			height: 375px;
+			cursor: pointer;
+		}
+
+		.card {
+			position: absolute;
+			width: 100%;
+			top: 0;
+			left: 0;
+			transform: translateY(40px) scale(0.96) rotate(0deg);
+			opacity: 0;
+			transition: transform 0.5s ease, opacity 0.5s ease;
+		}
+
+		.card.visible {
+			transform: translateY(0) scale(1) rotate(1.5deg);
+			opacity: 1;
+		}
+
+		.card.visible:nth-child(4n) {
+			transform: translateY(0) scale(1) rotate(2deg);
+			opacity: 1;
+		}
+		.card.visible:nth-child(4n-1) {
+			transform: translateY(0) scale(1) rotate(-1.5deg);
+			opacity: 1;
+		}
+		.card.visible:nth-child(4n-2) {
+			transform: translateY(0) scale(1) rotate(1deg);
+			opacity: 1;
+		}
+		.card.visible:nth-child(4n-3) {
+			transform: translateY(0) scale(1) rotate(-2.5deg);
+			opacity: 1;
+		}
+	</style>
+</head>
+<body>
+
+  	<!-- BOOSTER -->
+	<div id="booster">
+		<img src="./assets/booster.png" alt="Booster" />
+		<div id="tear"></div>
+	</div>
+
+	<!-- CARTES -->
+	<div id="cards">
+		<img class="card" src="./assets/cards/card1.png" />
+		<img class="card" src="./assets/cards/card2.png" />
+		<img class="card" src="./assets/cards/card3.png" />
+		<img class="card" src="./assets/cards/card4.png" />
+		<img class="card" src="./assets/cards/card5.png" />
+		<img class="card" src="./assets/cards/card6.png" />
+		<img class="card" src="./assets/cards/card7.png" />
+	</div>
+
+	<script>
+		const booster = document.getElementById('booster');
+		const cardsContainer = document.getElementById('cards');
+		const cards = Array.from(document.querySelectorAll('.card'));
+		let cardIndex = 0;
+
+		cardsContainer.addEventListener('click', () => {
+			if (cardIndex < cards.length) {
+				const card = cards[cardIndex];
+				card.classList.add('visible');
+				card.style.zIndex = cardIndex + 1;
+				cardIndex++;
+			}
+		});
+
+		booster.addEventListener('click', () => {
+			booster.classList.add('opened');
+
+			setTimeout(() => {
+				booster.style.display = 'none';
+				cardsContainer.style.display = 'block';
+				setTimeout(() => {
+					cardsContainer.dispatchEvent(new Event("click"));
+				}, 100)
+			}, 700);
+		});
+
+		
+	</script>
+</body>
+</html>
