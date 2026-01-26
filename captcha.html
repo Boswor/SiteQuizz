@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <title>reCAPTCHA (totalement legit)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/konami@1.7.0/konami.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -83,6 +84,7 @@
             border-radius: 3px;
             font-size: 12px;
             gap: 10px;
+            background: white;
         }
 
         .checkbox {
@@ -153,6 +155,24 @@
             flex-direction: column;
             gap: 0px;
         }
+
+        body {
+            background-image: url("./assets/apple.gif");
+            background-repeat: repeat;
+            background-size: 192px;
+            /* ou une taille précise */
+            animation: moveBg 5s linear infinite;
+        }
+
+        @keyframes moveBg {
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 576px -576px;
+            }
+        }
     </style>
 </head>
 
@@ -187,7 +207,7 @@
         </div>
 
         <div class="result" id="result"></div>
-        </div>
+    </div>
     </div>
 
     <script>
@@ -226,16 +246,18 @@
             result.style.display = 'block';
             if (selected == 3) {
                 result.innerHTML = "✅ La mission a échoué avec succès !<br>Envoyer une capture d'écran via Mattermost pour valider votre réponse.";
-            }else if (selected < 3) {
+            } else if (selected < 3) {
                 result.innerHTML = "❌ ERREUR !!!! Pas assez de cases sélectionnées :'(";
 
-            }else if (selected > 3) {
+            } else if (selected > 3) {
                 result.innerHTML = "❌ ERREUR !!!! Trop de cases sélectionnées >:(";
 
             }
         });
     </script>
-
+    <script>
+		const easterEgg = new Konami(atob("aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj0wSDlyTHlnQUNoTQ=="))
+	</script>
 </body>
 
 </html>
