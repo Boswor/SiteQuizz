@@ -297,6 +297,12 @@ h1 {
 	top: 0;
 	position: relative;
 }
+.result-card__emoji {
+	font-size: 96px;
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+}
 
 .result-card.show {
 	animation: gridReveal 0.4s ease-out forwards;

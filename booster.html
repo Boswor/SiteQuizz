@@ -5,6 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
 	<title>Ouverture de Booster</title>
+	<script src="https://unpkg.com/konami@1.7.0/konami.js"></script>
 	<style>
 		body {
 			margin: 0;
@@ -93,6 +94,13 @@
 			transform: translateY(0) scale(1) rotate(-2.5deg);
 			opacity: 1;
 		}
+
+		button {
+			position: absolute;
+
+			top: 10px;
+			left: 10px;
+		}
 	</style>
 </head>
 <body>
@@ -101,6 +109,8 @@
 		<img src="./assets/booster.png" alt="Booster" />
 		<div id="tear"></div>
 	</div>
+
+	<button onclick="window.location.reload();">CLIQUER POUR ROFAIRE</button>
 
 	<div id="cards">
 		<img class="card" src="./assets/cards/card1.png" />
@@ -140,6 +150,10 @@
 		});
 
 		
+	</script>
+
+	<script>
+		const easterEgg = new Konami(atob("aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1mSXA0VlBKX19NWSZ0PTE0cw=="))
 	</script>
 </body>
 </html>
