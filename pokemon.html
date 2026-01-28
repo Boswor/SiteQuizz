@@ -16,6 +16,23 @@
             overflow: hidden;
         }
 
+        body:after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url(assets/space.jpg);
+            opacity: 0;
+            transition: opacity 3s ease-in-out;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: -1;
+            pointer-events: none;
+        }
+
         header {
             background-color: #4CAF50;
             color: white;
@@ -53,11 +70,35 @@
         .pokemon-card {
             border: 1px solid #ddd;
             border-radius: 8px;
-            background: white;
+            background-color: white;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 1rem;
             text-align: center;
             cursor: pointer;
+            transition-property: border-color, box-shadow, background-color;
+            transition-timing-function: ease-in-out;
+            transition-duration: 3s;
+        }
+
+        .pokemon-card>div,
+        .pokemon-card>h2 {
+            transition: color 3s ease-in-out;
+        }
+
+        body.is-moving .pokemon-card {
+            border-color: transparent;
+            background: transparent;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0);
+            color: white !important;
+        }
+
+        body.is-moving:after {
+            opacity: 1;
+        }
+
+        body.is-moving .pokemon-card>div,
+        body.is-moving .pokemon-card>h2 {
+            color: white;
         }
 
         .pokemon-card model-viewer {
@@ -328,7 +369,7 @@
 
             const items = [];
             var speed = 0;
-            var deg=0;
+            var deg = 0;
             var acc = 0.01;
 
             dvds.forEach(dvd => {
@@ -339,13 +380,14 @@
                     wrapper: dvd,
                     x: 0,
                     y: 0,
-                    vx: maxSpeedX*2,
-                    vy: maxSpeedY*2,
+                    vx: maxSpeedX * 2,
+                    vy: maxSpeedY * 2,
                     dir: Math.random() > 0.5 ? 1 : -1
                 });
             });
 
             function animate() {
+
                 if (speed < 1) {
                     speed += acc;
                 } else {
@@ -358,8 +400,8 @@
                 items.forEach(item => {
                     const rect = item.wrapper.getBoundingClientRect();
 
-                    item.x += item.vx*speed;
-                    item.y += item.vy*speed;
+                    item.x += item.vx * speed;
+                    item.y += item.vy * speed;
 
                     // rebond horizontal
                     if (rect.left + item.vx <= 0 || rect.right + item.vx >= screenW) {
@@ -381,6 +423,46 @@
             setTimeout(() => {
                 requestAnimationFrame(animate);
             }, 12345);
+
+            setTimeout(() => {
+                document.body.classList.add("is-moving");
+            }, 10000);
+
+            setTimeout(() => {
+
+                document.querySelectorAll("model-viewer").forEach((mv) => {
+                    mv.rotationPerSecond = '2rad';
+
+                });
+            }, 13370);
+
+            setTimeout(() => {
+                document.querySelectorAll("model-viewer").forEach((mv) => {
+                    mv.rotationPerSecond = '4rad';
+
+                });
+            }, 14370);
+
+            setTimeout(() => {
+                document.querySelectorAll("model-viewer").forEach((mv) => {
+                    mv.rotationPerSecond = '10rad';
+
+                });
+            }, 16370);
+
+            setTimeout(() => {
+                document.querySelectorAll("model-viewer").forEach((mv) => {
+                    mv.rotationPerSecond = '30rad';
+
+                });
+            }, 20370);
+
+            setTimeout(() => {
+                document.querySelectorAll("model-viewer").forEach((mv) => {
+                    mv.rotationPerSecond = '30rad';
+
+                });
+            }, 30303);
         });
 
 
