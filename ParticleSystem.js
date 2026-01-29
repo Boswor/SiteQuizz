@@ -9,8 +9,8 @@ class ParticleSystem {
         this.particles = [];
     }
 
-    add(p) {
-        this.particles.push(p);
+    add(particle) {
+        this.particles.push(particle);
     }
 
     update() {
@@ -22,9 +22,7 @@ class ParticleSystem {
     }
 
     draw() {
-        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (const p of this.particles) {
-            p.draw(this.ctx);
-        }
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        for (const p of this.particles) p.draw(this.ctx);
     }
 }

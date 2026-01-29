@@ -1,47 +1,23 @@
 /*
-       ==============================
-          SPRITE PARTICLE
-       ================================
-       */
+==============================
+    SPRITE PARTICLE
+================================
+*/
 class SpriteParticle {
-    constructor({
-        image,
-        x,
-        y,
-        speed,
-        angle,
-        lifeFrames,
-        frameCount,
-        frameSpeed,
-        baseWidth
-    }) {
-        this.image = image;
+    constructor(config) {
+        Object.assign(this, config);
 
-        // position
-        this.x = x;
-        this.y = y;
+        this.vx = Math.cos(this.angle) * this.speed;
+        this.vy = Math.sin(this.angle) * this.speed;
 
-        // movement
-        this.vx = Math.cos(angle) * speed;
-        this.vy = Math.sin(angle) * speed;
-
-        // lifetime
-        this.life = lifeFrames;
-        this.dead = false;
-
-        // animation
-        this.frame = 0;
-        this.frameCount = frameCount;
-        this.frameSpeed = frameSpeed;
+        this.frame = Math.floor(Math.random() * this.frameCount);
         this.frameTimer = 0;
 
-        // size (ratio fixed)
-        const SPRITE_W = 357;
-        const SPRITE_H = 205;
-        const ratio = SPRITE_H / SPRITE_W;
+        const ratio = this.frameHeight / this.frameWidth;
+        this.width = this.baseWidth;
+        this.height = this.baseWidth * ratio;
 
-        this.width = baseWidth;
-        this.height = baseWidth * ratio;
+        this.dead = false;
     }
 
     update() {
@@ -52,8 +28,13 @@ class SpriteParticle {
         if (this.frameTimer >= this.frameSpeed) {
             this.frameTimer = 0;
             this.frame++;
+
             if (this.frame >= this.frameCount) {
-                this.frame = 0; // fin de l’animation
+                if (this.loop) {
+                    this.frame = 0;
+                } else {
+                    this.dead = true;
+                }
             }
         }
 
@@ -62,15 +43,12 @@ class SpriteParticle {
     }
 
     draw(ctx) {
-        const frameWidth = 357;
-        const frameHeight = 205;
-
         ctx.drawImage(
             this.image,
-            frameWidth * this.frame,
+            this.frame * this.frameWidth,
             0,
-            frameWidth,
-            frameHeight,
+            this.frameWidth,
+            this.frameHeight,
             this.x - this.width / 2,
             this.y - this.height / 2,
             this.width,
@@ -78,4 +56,3 @@ class SpriteParticle {
         );
     }
 }
-

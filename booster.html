@@ -182,7 +182,7 @@
 		document.addEventListener('DOMContentLoaded', () => {
 			/*
 			==============================
-			   CANVAS SETUP
+				CANVAS SETUP
 			================================
 			*/
 			const canvas = document.getElementById("canvas");
@@ -195,17 +195,64 @@
 			window.addEventListener("resize", resize);
 			resize();
 
+
+			/*
+			==============================
+				CONFIG PROJET
+			================================
+			*/
+			const CONFIG = {
+				spritesheet: {
+					src: "assets/furret_strip10.png",
+					frameWidth: 357,
+					frameHeight: 205,
+					frameCount: 10,
+					frameSpeed: 3,
+					loop: true
+				},
+
+				spawn: {
+					rate: 5,
+					size: () => Math.random() * 120 + 40,
+					x: () => canvas.width + 160,
+					y: () => Math.random() * canvas.height,
+					angle: () => Math.PI,
+					speed: () => Math.random() * 2 + 1,
+					life: () => 2000
+				}
+			};
+
+
 			/*
 			==============================
 			   LOAD SPRITESHEET
 			================================
 			*/
-			const sheet = new Image();
-			sheet.src = "assets/furret_strip10.png";
+			const image = new Image();
+			image.src = CONFIG.spritesheet.src;
 
-			sheet.onload = () => {
+			image.onload = () => {
 				const system = new ParticleSystem(ctx);
-				const spawner = new Spawner(system, sheet);
+
+				const spawner = new Spawner(
+					system,
+					() => new SpriteParticle({
+						image,
+						x: CONFIG.spawn.x(),
+						y: CONFIG.spawn.y(),
+						angle: CONFIG.spawn.angle(),
+						speed: CONFIG.spawn.speed(),
+						baseWidth: CONFIG.spawn.size(),
+						life: CONFIG.spawn.life(),
+
+						frameWidth: CONFIG.spritesheet.frameWidth,
+						frameHeight: CONFIG.spritesheet.frameHeight,
+						frameCount: CONFIG.spritesheet.frameCount,
+						frameSpeed: CONFIG.spritesheet.frameSpeed,
+						loop: CONFIG.spritesheet.loop
+					}),
+					CONFIG.spawn.rate
+				);
 
 				function loop() {
 					spawner.update();
@@ -213,6 +260,7 @@
 					system.draw();
 					requestAnimationFrame(loop);
 				}
+
 
 				loop();
 			};
