@@ -10,7 +10,7 @@ class SpriteParticle {
         this.vx = Math.cos(this.angle) * this.speed;
         this.vy = Math.sin(this.angle) * this.speed;
 
-        this.frame = Math.floor(Math.random() * this.frameCount);
+        this.frame = 0;
         this.frameTimer = 0;
 
         const ratio = this.frameHeight / this.frameWidth;

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Pommes meter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/konami@1.7.0/konami.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://csshake.surge.sh/csshake.min.css">
+    <link href="https://fonts.cdnfonts.com/css/wingdings" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        html {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-family: sans-serif;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .thermometer {
+            width: 240px;
+            margin: 0;
+            position: relative;
+            transform: scale(1.8);
+            bottom: 110px;
+            left: 100px;
+        }
+
+        .thermometer-base,
+        .thermometer-body {
+            background-color: #ededfa;
+            border: 15px solid #d8d9e8;
+            margin: 0 auto;
+        }
+
+        .thermometer-base,
+        .thermometer-base-fill {
+            margin: 0 auto;
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .thermometer-base {
+            height: 120px;
+            width: 120px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .thermometer-base::before {
+            content: "";
+            background-color: #ccc;
+            height: 36px;
+            width: 40px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            top: 0;
+            z-index: 10;
+        }
+
+        .thermometer-base::after {
+            content: "";
+            background-color: #fff;
+            height: 20px;
+            width: 20px;
+            position: absolute;
+            right: 12px;
+            top: 15px;
+            z-index: 10;
+            border-radius: 100%;
+        }
+
+        .thermometer-base-fill {
+            background-color: #ccc;
+            height: 93px;
+            width: 93px;
+            position: relative;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .thermometer-body,
+        .thermometer-body-fill {
+            margin: 0 auto;
+            border-radius: 50px 50px 0 0;
+            z-index: 1;
+        }
+
+        .thermometer-body {
+            height: 325px;
+            width: 70px;
+            border-bottom: 0;
+            position: relative;
+            bottom: -23px;
+        }
+
+        .thermometer-body-fill {
+            background-color: #ccc;
+            height: 16px;
+            width: 40px;
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: background-color 0.3s ease-in-out, height 1s linear(0, 0.004, 0.016, 0.035, 0.063, 0.098, 0.141 13.6%, 0.25, 0.391, 0.563, 0.765,
+                    1, 0.891 40.9%, 0.848, 0.813, 0.785, 0.766, 0.754, 0.75, 0.754, 0.766, 0.785,
+                    0.813, 0.848, 0.891 68.2%, 1 72.7%, 0.973, 0.953, 0.941, 0.938, 0.941, 0.953,
+                    0.973, 1, 0.988, 0.984, 0.988, 1) !important
+                /* ^^ */
+            ;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .btn {
+            color: #2d2930;
+            background-color: #dbdbdb;
+            padding: 5px;
+            height: 100px;
+            width: 100px;
+            border-radius: 50%;
+            border: none;
+            filter: drop-shadow(3px 3px 4px #333333);
+            box-shadow: inset 3px 3px 5px #fff;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s linear;
+            font-family: 'Wingdings', sans-serif;
+            font-size: 22px;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: scale(1.15);
+        }
+
+        .thermometer-body-fill,
+        .thermometer-base-fill,
+        .thermometer-base::before {
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .very-hot-bg .thermometer-body-fill,
+        .very-hot-bg .thermometer-base-fill,
+        .very-hot-bg .thermometer-base::before {
+            animation: rainbow-bg 0.8s linear;
+            animation-iteration-count: infinite;
+        }
+
+        .very-hot-bg #canvas {
+            display: block;
+        }
+
+        .very-cold-bg .thermometer-body-fill,
+        .very-cold-bg .thermometer-base-fill,
+        .very-cold-bg .thermometer-base::before {
+            background-color: #6495ed;
+        }
+
+        .cold-bg .thermometer-body-fill,
+        .cold-bg .thermometer-base-fill,
+        .cold-bg .thermometer-base::before {
+            background-color: #800080;
+        }
+
+        .warm-bg .thermometer-body-fill,
+        .warm-bg .thermometer-base-fill,
+        .warm-bg .thermometer-base::before {
+            background-color: #c40233;
+        }
+
+        .very-hot-bg {
+            background: rgb(232, 154, 30);
+            background: linear-gradient(0deg,
+                    rgba(232, 154, 30, 1) 0%,
+                    rgba(232, 141, 30, 1) 35%,
+                    rgba(232, 50, 30, 1) 100%);
+        }
+
+
+        .warm-bg {
+            background: rgb(30, 232, 52);
+            background: linear-gradient(0deg,
+                    rgba(30, 232, 52, 1) 0%,
+                    rgba(151, 232, 30, 1) 35%,
+                    rgba(229, 232, 30, 1) 100%);
+        }
+
+        .cold-bg {
+            background: rgb(30, 212, 232);
+            background: linear-gradient(0deg,
+                    rgba(30, 212, 232, 1) 0%,
+                    rgba(30, 232, 130, 1) 35%,
+                    rgba(30, 232, 52, 1) 100%);
+        }
+
+        .very-cold-bg {
+            background: rgb(120, 30, 232);
+            background: linear-gradient(0deg,
+                    rgba(120, 30, 232, 1) 0%,
+                    rgba(30, 127, 232, 1) 35%,
+                    rgba(30, 212, 232, 1) 100%);
+        }
+
+        .feur-mdrr {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-end;
+            gap: 200px;
+            width: 100%;
+            height: 100%;
+            padding-bottom: 150px;
+        }
+
+        @keyframes rainbow-bg {
+
+            100%,
+            0% {
+                background-color: rgb(255, 0, 0);
+            }
+
+            8% {
+                background-color: rgb(255, 127, 0);
+            }
+
+            16% {
+                background-color: rgb(255, 255, 0);
+            }
+
+            25% {
+                background-color: rgb(127, 255, 0);
+            }
+
+            33% {
+                background-color: rgb(0, 255, 0);
+            }
+
+            41% {
+                background-color: rgb(0, 255, 127);
+            }
+
+            50% {
+                background-color: rgb(0, 255, 255);
+            }
+
+            58% {
+                background-color: rgb(0, 127, 255);
+            }
+
+            66% {
+                background-color: rgb(0, 0, 255);
+            }
+
+            75% {
+                background-color: rgb(127, 0, 255);
+            }
+
+            83% {
+                background-color: rgb(255, 0, 255);
+            }
+
+            91% {
+                background-color: rgb(255, 0, 127);
+            }
+        }
+
+        #canvas {
+            z-index: 1;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            display: none;
+        }
+    </style>
+    <script src="ParticleSystem.js"></script>
+    <script src="SpriteParticle.js"></script>
+    <script src="Spawner.js"></script>
+</head>
+
+<body class="very-cold-bg">
+    <canvas id="canvas"></canvas>
+
+    <h1>Click on an icon to change the temperature!</h1>
+    <div class="feur-mdrr">
+        <div class="thermometer">
+            <div class="thermometer-body">
+                <div class="thermometer-body-fill"></div>
+            </div>
+            <div class="thermometer-base">
+                <div class="thermometer-base-fill"></div>
+            </div>
+
+        </div>
+
+        <div class="controls">
+            <button id="very-cold" class="btn very-cold" aria-label="Set temperature to very cold">
+                0
+            </button>
+
+            <button id="cold" class="btn cold" aria-label="Set temperature to cold">
+                1
+            </button>
+
+            <button id="warm" class="btn warm" aria-label="Set temperature to warm">
+                4ou5
+            </button>
+
+            <button id="very-hot" class="btn very-hot" aria-label="Set temperature to very hot">
+                100+
+            </button>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const FILL_HEIGHT = {
+                "very-hot": "1000px",
+                warm: "210px",
+                cold: "60px",
+                "very-cold": "16px"
+            };
+
+            let tempFill = document.querySelector(".thermometer-body-fill");
+            let controls = document.querySelector(".controls");
+            let container = document.querySelector(".feur-mdrr");
+
+            controls.addEventListener("click", (event) => {
+                if (event.target.nodeName === "BUTTON") {
+                    document.body.className = `${event.target.id}-bg`;
+                    tempFill.style.setProperty("height", FILL_HEIGHT[event.target.id]);
+                    if (event.target.id == "very-hot") {
+                        container.classList.add("shake-hard");
+                    } else {
+                        container.classList.remove("shake-hard");
+
+                    }
+                }
+            });
+
+            /*
+            ==============================
+                CANVAS SETUP
+            ================================
+            */
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener("resize", resize);
+            resize();
+
+
+            /*
+            ==============================
+                CONFIG PROJET
+            ================================
+            */
+            const CONFIG = {
+                spritesheet: {
+                    src: "assets/kaboom_strip17.png",
+                    frameWidth: 142,
+                    frameHeight: 200,
+                    frameCount: 17,
+                    frameSpeed: 2,
+                    loop: false
+                },
+
+                spawn: {
+                    rate: 30,
+                    size: () => Math.random() * 120 + 80,
+                    x: () => Math.random() * canvas.width,
+                    y: () => Math.random() * canvas.height,
+                    angle: () => 0,
+                    speed: () => 0,
+                    life: () => (CONFIG.frameCount + 1) * CONFIG.frameSpeed
+                }
+            };
+
+
+            /*
+            ==============================
+               LOAD SPRITESHEET
+            ================================
+            */
+            const image = new Image();
+            image.src = CONFIG.spritesheet.src;
+
+            image.onload = () => {
+                const system = new ParticleSystem(ctx);
+
+                const spawner = new Spawner(
+                    system,
+                    () => new SpriteParticle({
+                        image,
+                        x: CONFIG.spawn.x(),
+                        y: CONFIG.spawn.y(),
+                        angle: CONFIG.spawn.angle(),
+                        speed: CONFIG.spawn.speed(),
+                        baseWidth: CONFIG.spawn.size(),
+                        life: CONFIG.spawn.life(),
+
+                        frameWidth: CONFIG.spritesheet.frameWidth,
+                        frameHeight: CONFIG.spritesheet.frameHeight,
+                        frameCount: CONFIG.spritesheet.frameCount,
+                        frameSpeed: CONFIG.spritesheet.frameSpeed,
+                        loop: CONFIG.spritesheet.loop
+                    }),
+                    CONFIG.spawn.rate
+                );
+
+                function loop() {
+                    spawner.update();
+                    system.update();
+                    system.draw();
+                    requestAnimationFrame(loop);
+                }
+
+
+                loop();
+            };
+        });
+    </script>
+
+
+    <script>
+        const easterEgg = new Konami(atob("aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj0wSDlyTHlnQUNoTQ=="))
+    </script>
+</body>
+
+</html>
