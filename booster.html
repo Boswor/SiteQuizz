@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,7 +14,7 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			background: radial-gradient(circle at top, #1b1f3a, #090b18);
+			background: radial-gradient(circle at top, #383841, #141418);
 			overflow: hidden;
 			font-family: sans-serif;
 		}
@@ -82,14 +83,17 @@
 			transform: translateY(0) scale(1) rotate(2deg);
 			opacity: 1;
 		}
+
 		.card.visible:nth-child(4n-1) {
 			transform: translateY(0) scale(1) rotate(-1.5deg);
 			opacity: 1;
 		}
+
 		.card.visible:nth-child(4n-2) {
 			transform: translateY(0) scale(1) rotate(1deg);
 			opacity: 1;
 		}
+
 		.card.visible:nth-child(4n-3) {
 			transform: translateY(0) scale(1) rotate(-2.5deg);
 			opacity: 1;
@@ -100,10 +104,28 @@
 
 			top: 10px;
 			left: 10px;
+
+			background: red;
+			color: yellowgreen;
+		}
+
+		#canvas {
+			z-index: -1;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
 		}
 	</style>
 </head>
+
 <body>
+	<script src="ParticleSystem.js"></script>
+	<script src="SpriteParticle.js"></script>
+	<script src="Spawner.js"></script>
+
+	<canvas id="canvas"></canvas>
 
 	<div id="booster">
 		<img src="./assets/booster.png" alt="Booster" />
@@ -123,6 +145,9 @@
 	</div>
 
 	<script>
+
+
+
 		const booster = document.getElementById('booster');
 		const cardsContainer = document.getElementById('cards');
 		const cards = Array.from(document.querySelectorAll('.card'));
@@ -149,11 +174,54 @@
 			}, 700);
 		});
 
-		
+
+
+	</script>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			/*
+			==============================
+			   CANVAS SETUP
+			================================
+			*/
+			const canvas = document.getElementById("canvas");
+			const ctx = canvas.getContext("2d");
+
+			function resize() {
+				canvas.width = window.innerWidth;
+				canvas.height = window.innerHeight;
+			}
+			window.addEventListener("resize", resize);
+			resize();
+
+			/*
+			==============================
+			   LOAD SPRITESHEET
+			================================
+			*/
+			const sheet = new Image();
+			sheet.src = "assets/furret_strip10.png";
+
+			sheet.onload = () => {
+				const system = new ParticleSystem(ctx);
+				const spawner = new Spawner(system, sheet);
+
+				function loop() {
+					spawner.update();
+					system.update();
+					system.draw();
+					requestAnimationFrame(loop);
+				}
+
+				loop();
+			};
+		});
 	</script>
 
 	<script>
 		const easterEgg = new Konami(atob("aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1mSXA0VlBKX19NWSZ0PTE0cw=="))
 	</script>
 </body>
+
 </html>
