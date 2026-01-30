@@ -117,10 +117,33 @@
 			width: 100vw;
 			height: 100vh;
 		}
+
+		body:after {
+			content: 'cliquez svp';
+			position: fixed;
+			width: 100vw;
+			height: 100vh;
+			top: 0;
+			left: 0;
+			background: black;
+			color: white;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			pointer-events: none;
+			opacity: 0;
+			transition: opacity 0.5s ease-in-out;
+			z-index: 999;
+		}
+
+		body.nothing:after {
+			pointer-events: all;
+			opacity: 1;
+		}
 	</style>
 </head>
 
-<body>
+<body class="nothing">
 	<script src="ParticleSystem.js"></script>
 	<script src="SpriteParticle.js"></script>
 	<script src="Spawner.js"></script>
@@ -132,8 +155,7 @@
 		<div id="tear"></div>
 	</div>
 
-	<button onclick="window.location.reload();">CLIQUER POUR ROFAIRE</button>
-
+	<button class="uwu">CLIQUER POUR ROFAIRE</button>
 	<div id="cards">
 		<img class="card" src="./assets/cards/card1.png" />
 		<img class="card" src="./assets/cards/card2.png" />
@@ -145,125 +167,156 @@
 	</div>
 
 	<script>
-
-
-
-		const booster = document.getElementById('booster');
-		const cardsContainer = document.getElementById('cards');
-		const cards = Array.from(document.querySelectorAll('.card'));
-		let cardIndex = 0;
-
-		cardsContainer.addEventListener('click', () => {
-			if (cardIndex < cards.length) {
-				const card = cards[cardIndex];
-				card.classList.add('visible');
-				card.style.zIndex = cardIndex + 1;
-				cardIndex++;
-			}
-		});
-
-		booster.addEventListener('click', () => {
-			booster.classList.add('opened');
-
-			setTimeout(() => {
-				booster.style.display = 'none';
-				cardsContainer.style.display = 'block';
-				setTimeout(() => {
-					cardsContainer.dispatchEvent(new Event("click"));
-				}, 100)
-			}, 700);
-		});
-
-
-
-	</script>
-
-	<script>
 		document.addEventListener('DOMContentLoaded', () => {
-			/*
-			==============================
-				CANVAS SETUP
-			================================
-			*/
-			const canvas = document.getElementById("canvas");
-			const ctx = canvas.getContext("2d");
+			const sounds = {
+				cut: new Audio("assets/sounds/cut.mp3"),
+				zic: new Audio("assets/sounds/zic.mp3"),
+				card: new Audio("assets/sounds/card.mp3"),
+			};
 
-			function resize() {
-				canvas.width = window.innerWidth;
-				canvas.height = window.innerHeight;
+
+			function playSound(name) {
+				const s = sounds[name];
+				if (!s) return;
+				s.currentTime = 0;
+				s.play();
 			}
-			window.addEventListener("resize", resize);
-			resize();
+			window.addEventListener("click", (e) => {
+				document.body.classList.remove("nothing");
+				playSound("zic");
 
 
-			/*
-			==============================
-				CONFIG PROJET
-			================================
-			*/
-			const CONFIG = {
-				spritesheet: {
-					src: "assets/furret_strip10.png",
-					frameWidth: 357,
-					frameHeight: 205,
-					frameCount: 10,
-					frameSpeed: 3,
-					loop: true
-				},
+				const booster = document.getElementById('booster');
+				const cardsContainer = document.getElementById('cards');
+				const cards = Array.from(document.querySelectorAll('.card'));
+				const uwu = document.querySelector(".uwu");
+				let cardIndex = 0;
 
-				spawn: {
-					rate: 5,
-					size: () => Math.random() * 120 + 40,
-					x: () => canvas.width + 160,
-					y: () => Math.random() * canvas.height,
-					angle: () => Math.PI,
-					speed: () => Math.random() * 2 + 1,
-					life: () => 2000
+				cardsContainer.addEventListener('click', () => {
+					if (cardIndex < cards.length) {
+						playSound("card")
+
+						const card = cards[cardIndex];
+						card.classList.add('visible');
+						card.style.zIndex = cardIndex + 1;
+						cardIndex++;
+					}
+				});
+
+				booster.addEventListener('click', () => {
+					booster.classList.add('opened');
+					playSound("cut")
+
+					setTimeout(() => {
+
+						booster.style.display = 'none';
+						cardsContainer.style.display = 'block';
+						setTimeout(() => {
+							cardsContainer.dispatchEvent(new Event("click"));
+						}, 100)
+					}, 700);
+				});
+
+				uwu.addEventListener('click', () => {
+					booster.classList.remove('opened');
+					booster.style.display = 'block';
+					cardsContainer.style.display = 'none';
+					cards.forEach(c => {
+						c.classList.remove("visible");
+					})
+					cardIndex = 0;
+				});
+
+
+				/*
+				==============================
+					CANVAS SETUP
+				================================
+				*/
+				const canvas = document.getElementById("canvas");
+				const ctx = canvas.getContext("2d");
+
+				function resize() {
+					canvas.width = window.innerWidth;
+					canvas.height = window.innerHeight;
 				}
-			};
+				window.addEventListener("resize", resize);
+				resize();
 
 
-			/*
-			==============================
-			   LOAD SPRITESHEET
-			================================
-			*/
-			const image = new Image();
-			image.src = CONFIG.spritesheet.src;
+				/*
+				==============================
+					CONFIG PROJET
+				================================
+				*/
+				const CONFIG = {
+					spritesheet: {
+						src: "assets/furret_strip10.png",
+						frameWidth: 357,
+						frameHeight: 205,
+						frameCount: 10,
+						frameSpeed: 3,
+						loop: true
+					},
 
-			image.onload = () => {
-				const system = new ParticleSystem(ctx);
-
-				const spawner = new Spawner(
-					system,
-					() => new SpriteParticle({
-						image,
-						x: CONFIG.spawn.x(),
-						y: CONFIG.spawn.y(),
-						angle: CONFIG.spawn.angle(),
-						speed: CONFIG.spawn.speed(),
-						baseWidth: CONFIG.spawn.size(),
-						life: CONFIG.spawn.life(),
-
-						frameWidth: CONFIG.spritesheet.frameWidth,
-						frameHeight: CONFIG.spritesheet.frameHeight,
-						frameCount: CONFIG.spritesheet.frameCount,
-						frameSpeed: CONFIG.spritesheet.frameSpeed,
-						loop: CONFIG.spritesheet.loop
-					}),
-					CONFIG.spawn.rate
-				);
-
-				function loop() {
-					spawner.update();
-					system.update();
-					system.draw();
-					requestAnimationFrame(loop);
-				}
+					spawn: {
+						rate: 5,
+						size: () => Math.random() * 120 + 40,
+						x: () => canvas.width + 160,
+						y: () => Math.random() * canvas.height,
+						angle: () => Math.PI,
+						speed: () => Math.random() * 2 + 1,
+						life: () => 2000
+					}
+				};
 
 
-				loop();
-			};
+				/*
+				==============================
+				   LOAD SPRITESHEET
+				================================
+				*/
+				const image = new Image();
+				image.src = CONFIG.spritesheet.src;
+
+				image.onload = () => {
+					const system = new ParticleSystem(ctx);
+
+					const spawner = new Spawner(
+						system,
+						() => new SpriteParticle({
+							image,
+							x: CONFIG.spawn.x(),
+							y: CONFIG.spawn.y(),
+							angle: CONFIG.spawn.angle(),
+							speed: CONFIG.spawn.speed(),
+							baseWidth: CONFIG.spawn.size(),
+							life: CONFIG.spawn.life(),
+
+							frameWidth: CONFIG.spritesheet.frameWidth,
+							frameHeight: CONFIG.spritesheet.frameHeight,
+							frameCount: CONFIG.spritesheet.frameCount,
+							frameSpeed: CONFIG.spritesheet.frameSpeed,
+							loop: CONFIG.spritesheet.loop
+						}),
+						CONFIG.spawn.rate
+					);
+
+					function loop() {
+						spawner.update();
+						system.update();
+						system.draw();
+						requestAnimationFrame(loop);
+					}
+
+
+					loop();
+				};
+
+			}, { once: true });
+
+
+
 		});
 	</script>
 
