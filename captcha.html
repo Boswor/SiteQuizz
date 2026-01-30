@@ -25,6 +25,10 @@
             width: 340px;
             border: 1px solid #dcdcdc;
             box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+            position: absolute;
+            left: 50%;
+            bottom: 100%;
+            transform: translateX(-50%);
         }
 
         .captcha-header {
@@ -85,6 +89,8 @@
             font-size: 12px;
             gap: 10px;
             background: white;
+            align-self: center;
+
         }
 
         .checkbox {
@@ -129,7 +135,7 @@
             display: none;
         }
 
-        button {
+        #verify {
             background: #4285f4;
             color: #fff;
             border: none;
@@ -138,7 +144,7 @@
             font-size: 12px;
         }
 
-        button:hover {
+        #verify:hover {
             background: #3367d6;
         }
 
@@ -154,6 +160,10 @@
             display: flex;
             flex-direction: column;
             gap: 0px;
+            position: relative;
+            max-width: 360px;
+            align-self: center;
+
         }
 
         body {
@@ -173,42 +183,87 @@
                 background-position: 576px -576px;
             }
         }
+
+        .form {
+            background: white;
+            padding: 40px;
+            border-radius: 5px;
+            border: 1px solid black;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
     </style>
 </head>
 
 <body>
+    <div class="form">
+        <h1 style="font-family: 'Times New Roman', Times, serif;color: magenta;margin-bottom: 0;">MY FORM</h1>
+        <details>
+            <summary>henlo worl</summary><mark>oh hi mark</mark>
+        </details>
 
-    <div class="col">
-        <div class="captcha hidden">
-            <div class="captcha-header">
-                <strong>C'est l'heure de dîner en famille !</strong>
-                Sélectionnez les 3 cases qui correspondent le plus à votre programme idéal.
+        <br>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="lastname">Nom : </label>
+                <input name="lastname" type="text" placeholder="Josué">
+                <br>
+                <h1 style="margin: 0 !important;margin-top: -16px !important;"><small><i style="font-size: 7px;">Format
+                            accepté:
+                            06 xx xx
+                            xx xx
+                            xx</i></small></h1>
             </div>
-
-            <div class="grid" id="grid">
-                <div class="cell"><img src="assets/captcha/img1.png" alt=""></div>
-                <div class="cell"><img src="assets/captcha/img2.png" alt=""></div>
-                <div class="cell"><img src="assets/captcha/img3.png" alt=""></div>
-                <div class="cell"><img src="assets/captcha/img4.png" alt=""></div>
-                <div class="cell"><img src="assets/captcha/img5.png" alt=""></div>
-                <div class="cell"><img src="assets/captcha/img6.png" alt=""></div>
-                <div class="cell"><img src="assets/captcha/img7.png" alt=""></div>
-                <div class="cell"><img src="assets/captcha/img8.png" alt=""></div>
-                <div class="cell"><img src="assets/captcha/img9.png" alt=""></div>
+            <div class="form-group">
+                <label for="firstname">Prénom : </label>
+                <input name="firstname" type="text" placeholder="[object Object]">
             </div>
         </div>
+        <div class="form-group form-row form-row-check">
+            <input name="question" type="checkbox">
 
-        <div class="captcha-footer">
-            <div class="checkbox">
-                <div class="fake-box"></div>
-                <span>Je ne suis pas un robot</span>
-            </div>
-            <button id="verify">Vérifier</button>
+            <label for="question">Je souhaite recevoir la question bonus à la fin oui oui oui</label>
         </div>
+        <div class="col">
+            <div class="captcha hidden">
+                <div class="captcha-header">
+                    <strong>C'est l'heure de dîner en famille !</strong>
+                    Sélectionnez les 3 cases qui correspondent le plus à votre programme idéal.
+                </div>
 
-        <div class="result" id="result"></div>
+                <div class="grid" id="grid">
+                    <div class="cell"><img src="assets/captcha/img1.png" alt=""></div>
+                    <div class="cell"><img src="assets/captcha/img2.png" alt=""></div>
+                    <div class="cell"><img src="assets/captcha/img3.png" alt=""></div>
+                    <div class="cell"><img src="assets/captcha/img4.png" alt=""></div>
+                    <div class="cell"><img src="assets/captcha/img5.png" alt=""></div>
+                    <div class="cell"><img src="assets/captcha/img6.png" alt=""></div>
+                    <div class="cell"><img src="assets/captcha/img7.png" alt=""></div>
+                    <div class="cell"><img src="assets/captcha/img8.png" alt=""></div>
+                    <div class="cell"><img src="assets/captcha/img9.png" alt=""></div>
+                </div>
+            </div>
+
+            <div class="captcha-footer">
+                <div class="checkbox">
+                    <div class="fake-box"></div>
+                    <span>Je ne suis pas un robot</span>
+                </div>
+                <button id="verify">Vérifier</button>
+            </div>
+
+            <div class="result" id="result"></div>
+        </div>
+        <button disabled>Envoyer</button>
     </div>
-    </div>
+
 
     <script>
         const fakeBox = document.querySelector('.fake-box');
@@ -256,8 +311,8 @@
         });
     </script>
     <script>
-		const easterEgg = new Konami(atob("aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj0wSDlyTHlnQUNoTQ=="))
-	</script>
+        const easterEgg = new Konami(atob("aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj0wSDlyTHlnQUNoTQ=="))
+    </script>
 </body>
 
 </html>
