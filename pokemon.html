@@ -6,6 +6,8 @@
     <meta http-equiv="x-ua-compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script src="https://unpkg.com/konami@1.7.0/konami.js"></script>
+
     <title>Pokedex</title>
     <style>
         body {
@@ -38,6 +40,7 @@
             color: white;
             text-align: center;
             padding: 1rem;
+            transition: background-color 3s ease-in-out;
         }
 
         .nav-links {
@@ -90,6 +93,10 @@
             background: transparent;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0);
             color: white !important;
+        }
+
+        body.is-moving header {
+            background: transparent;
         }
 
         body.is-moving:after {
@@ -265,11 +272,11 @@
         let allPokemon = [];
 
         const generationRanges = {
-            0: [493, 483, 358, 872, 680, 430, 121, 472, 97],
+            0: [493, 483, 358, 872, 680, 275, 121, 472, 97],
         };
 
         const pkmnNames = {
-            493: "Arceus", 483: "Dialga", 358: "Eoko", 872: "Frissonille", 680: "Dimoclès", 430: "Corboss", 121: "Staross", 472: "Scorvol", 97: "Hypnomade"
+            493: "Arceus", 483: "Dialga", 358: "Eoko", 872: "Frissonille", 680: "Dimoclès", 275: "Tengalice", 121: "Staross", 472: "Scorvol", 97: "Hypnomade"
         }
 
         async function fetchPokemonData() {
@@ -459,14 +466,23 @@
 
             setTimeout(() => {
                 document.querySelectorAll("model-viewer").forEach((mv) => {
-                    mv.rotationPerSecond = '30rad';
+                    mv.rotationPerSecond = '50rad';
 
                 });
-            }, 30303);
+            }, 40303);
+
+            setTimeout(() => {
+                document.querySelectorAll("model-viewer").forEach((mv) => {
+                    mv.rotationPerSecond = '60rad';
+
+                });
+            }, 69690);
         });
 
+    </script>
 
-
+    <script>
+        const easterEgg = new Konami(atob("aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kVkhkVWFraUVvNA=="))
     </script>
 </body>
 

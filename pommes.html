@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/konami@1.7.0/konami.js"></script>
     <link rel="stylesheet" type="text/css" href="https://csshake.surge.sh/csshake.min.css">
-    <link href="https://fonts.cdnfonts.com/css/wingdings" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -150,14 +149,20 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.2s linear;
-            font-family: 'Wingdings', sans-serif;
-            font-size: 22px;
+            transition: transform 0.2s linear, background-color 0.2s linear;
+            font-size: 45px;
             text-align: center;
         }
 
-        .btn:hover {
+        .btn:hover,
+        .btn.active {
             transform: scale(1.15);
+            background-color: white;
+        }
+
+        .very-hot-bg .btn.active {
+            animation: rainbow-bg 0.8s linear;
+            animation-iteration-count: infinite;
         }
 
         .thermometer-body-fill,
@@ -238,6 +243,87 @@
             padding-bottom: 150px;
         }
 
+        .yes {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            top: 45px;
+        }
+
+        .results {
+            position: relative;
+            height: 100%;
+            margin-top: 80px;
+        }
+
+        .photo-result {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .photo {
+            height: 400px;
+        }
+
+        .title {
+            text-align: center;
+            max-width: 750px;
+            color: white;
+            height: 150px;
+        }
+
+        .title span {
+            font-size: 60px;
+        }
+
+        .title .subtitle {
+            font-size: 30px;
+            color: white;
+        }
+
+
+        .photo-result--very-hot {
+            transition: unset;
+            z-index: 1;
+        }
+
+        .very-hot-bg .photo-result--very-hot {
+            opacity: 1;
+        }
+
+        .very-cold-bg .photo-result--very-cold {
+            opacity: 1;
+        }
+
+        .warm-bg .photo-result--warm {
+            opacity: 1;
+        }
+
+        .cold-bg .photo-result--cold {
+            opacity: 1;
+        }
+
+        h1 {
+            color: magenta;
+            font-size: 83px;
+            position: absolute;
+            z-index: 10;
+            top: -40px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
         @keyframes rainbow-bg {
 
             100%,
@@ -309,7 +395,7 @@
 <body class="very-cold-bg">
     <canvas id="canvas"></canvas>
 
-    <h1>Click on an icon to change the temperature!</h1>
+    <h1>Combien de pommes pouvez-vous manger à la suite si vous avez le ventre vide ?</h1>
     <div class="feur-mdrr">
         <div class="thermometer">
             <div class="thermometer-body">
@@ -321,24 +407,70 @@
 
         </div>
 
-        <div class="controls">
-            <button id="very-cold" class="btn very-cold" aria-label="Set temperature to very cold">
-                0
-            </button>
+        <div class="yes">
+            <div class="results">
+                <div class="photo-result photo-result--very-cold">
+                    <img class="photo" src="assets/aaa.gif">
+                    <div class="title">
+                        <span>0</span>
+                        <div class="subtitle">
+                            J'espère que tu as une bonne excuse......
+                        </div>
+                    </div>
+                </div>
 
-            <button id="cold" class="btn cold" aria-label="Set temperature to cold">
-                1
-            </button>
+                <div class="photo-result photo-result--cold">
+                    <img class="photo" src="assets/bren.png">
+                    <div class="title">
+                        <span>1</span>
+                        <div class="subtitle">
+                            Eh oui après la première tu n'auras plus le vendre vide, malin ! 🧠 (mais c'est pas un
+                            mindset de winner ça)
+                        </div>
+                    </div>
+                </div>
 
-            <button id="warm" class="btn warm" aria-label="Set temperature to warm">
-                4ou5
-            </button>
+                <div class="photo-result photo-result--warm">
+                    <img class="photo" src="assets/enjoyer.png">
+                    <div class="title">
+                        <span>4 ou 5</span>
+                        <div class="subtitle">
+                            Average apple enjoyer
+                        </div>
+                    </div>
+                </div>
 
-            <button id="very-hot" class="btn very-hot" aria-label="Set temperature to very hot">
-                100+
-            </button>
+                <div class="photo-result photo-result--very-hot">
+                    <img class="photo" src="assets/beem.png">
+                    <div class="title">
+                        <span>PLUS DE 99 !!!!!!!</span>
+                        <div class="subtitle">
+                            PARCE QUE TU ES JUSTE TROP LE GOAT !!!1!!!!!!
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="controls">
+                <button id="very-cold" class="active btn very-cold" aria-label="Set temperature to very cold">
+                    ♨️
+                </button>
+
+                <button id="cold" class="btn cold" aria-label="Set temperature to cold">
+                    📁
+                </button>
+
+                <button id="warm" class="btn warm" aria-label="Set temperature to warm">
+                    🗜️
+                </button>
+
+                <button id="very-hot" class="btn very-hot" aria-label="Set temperature to very hot">
+                    🍉
+                </button>
+
+            </div>
         </div>
+
     </div>
 
     <script>
@@ -358,6 +490,10 @@
                 if (event.target.nodeName === "BUTTON") {
                     document.body.className = `${event.target.id}-bg`;
                     tempFill.style.setProperty("height", FILL_HEIGHT[event.target.id]);
+                    document.querySelectorAll("button").forEach(b => {
+                        b.classList.remove("active");
+                    })
+                    event.target.classList.add("active");
                     if (event.target.id == "very-hot") {
                         container.classList.add("shake-hard");
                     } else {
@@ -456,7 +592,7 @@
 
 
     <script>
-        const easterEgg = new Konami(atob("aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj0wSDlyTHlnQUNoTQ=="))
+        const easterEgg = new Konami(atob("aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1aS0JuR3V3eEZ2RQ=="))
     </script>
 </body>
 
