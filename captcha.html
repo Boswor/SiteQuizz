@@ -65,6 +65,13 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            transform-origin: center;
+            transform: scale(1);
+            transition: transform 0.2s ease;
+        }
+
+        .cell.selected img {
+            transform: scale(1.2);
         }
 
         .cell.selected::after {
