@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>XP Desktop - Touhou 12</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            margin: 0;
+            font-family: Tahoma, Verdana, sans-serif;
+            overflow: hidden;
+            background: url('/assets/xp/wallpaper.jpg') center/cover no-repeat;
+            background-size: cover;
+        }
+
+        /* ================= XP BOOT ================= */
+        #loadingScreen {
+            position: fixed;
+            background: black;
+            z-index: 9999;
+            width: 100vw;
+            height: 100vh;
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        #loadingScreen.hide {
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        #loadingScreen img {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #loadingScreen .container {
+            height: 20px;
+            width: 140px;
+            border: 1px solid white;
+            border-radius: 4px;
+            position: absolute;
+            left: 50%;
+            top: 60%;
+            overflow: hidden;
+            transform: translate(-50%, 0%);
+        }
+
+        #loadingScreen .Loader {
+            height: 16px;
+            width: 10px;
+            float: left;
+            background: white;
+            margin-top: 2px;
+            margin-left: 5px;
+            border-radius: 2px;
+            box-shadow: inset 0 0 12px blue;
+            position: relative;
+            left: -50px;
+            animation: move1 2s linear infinite;
+        }
+
+        @keyframes move1 {
+            97% {
+                left: 150px;
+                opacity: 1;
+            }
+
+            98% {
+                opacity: 0;
+                left: 150px;
+            }
+
+            99% {
+                left: -50px;
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* ================= DESKTOP ================= */
+        .xp-desktop {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .desktop-icon {
+            width: 72px;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            position: absolute;
+            cursor: pointer;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .desktop-icon img {
+            width: 48px;
+            height: 48px;
+        }
+
+        /* ================= TASKBAR ================= */
+        .taskbar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(#3a6ea5, #245edc);
+            border-top: 1px solid #6aa2ff;
+            display: flex;
+            align-items: center;
+            padding: 0 6px;
+        }
+
+        .start-button {
+            background: linear-gradient(#3fdc3f, #1fa31f);
+            border: 1px solid #0c5c0c;
+            border-radius: 4px;
+            padding: 4px 14px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+
+        .start-button span {
+            position: relative;
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .start-button span::before {
+            content: "";
+            background-image: url(assets/xp/mini_logo.png);
+            width: 24px;
+            height: 24px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .task-buttons {
+            display: flex;
+            gap: 4px;
+            flex: 1;
+            overflow: hidden
+        }
+
+        .task-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 140px;
+            height: 28px;
+            background: linear-gradient(#3a6ea5, #245edc);
+            border: 2px solid #245edc;
+            border-radius: 2px;
+            padding: 0 6px;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .task-btn img {
+            width: 16px;
+            height: 16px
+        }
+
+        .task-btn.active {
+            background: #184fbb;
+            border-color: #1241a4;
+        }
+
+        .task-btn span {
+            color: #fff;
+        }
+
+        .start-button:active {
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.6);
+        }
+
+        .taskbar-clock {
+            margin-left: auto;
+            color: white;
+            font-size: 12px;
+            padding-right: 10px;
+        }
+
+        /* ================= START MENU ================= */
+        .start-menu {
+            position: absolute;
+            bottom: 40px;
+            left: 5px;
+            width: 380px;
+            height: 450px;
+            background: #ece9d8;
+            border: 1px solid #003c74;
+            display: none;
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, .6);
+        }
+
+        .start-menu.active {
+            display: block;
+        }
+
+        .start-menu-header {
+            height: 60px;
+            background: linear-gradient(#2a6adf, #0b3ea5);
+            color: white;
+            display: flex;
+            align-items: center;
+            padding-left: 15px;
+            font-weight: bold;
+        }
+
+        .start-columns {
+            display: flex;
+            height: calc(100% - 60px);
+        }
+
+        .start-left {
+            width: 55%;
+            background: white;
+            padding: 10px;
+        }
+
+        .start-right {
+            width: 45%;
+            background: #d3e5fa;
+            padding: 10px;
+        }
+
+        .start-item {
+            padding: 6px;
+            cursor: pointer;
+        }
+
+        .start-item:hover {
+            background: #316ac5;
+            color: white;
+        }
+
+        /* WINDOWS */
+        .window {
+            position: absolute;
+            width: 520px;
+            background: #ece9d8;
+            border: 1px solid #003c74;
+            box-shadow: 3px 3px 6px rgba(0, 0, 0, .6);
+            animation: openWin .15s ease-out;
+        }
+
+        @keyframes openWin {
+            from {
+                transform: scale(.95);
+                opacity: .6
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        .titlebar {
+            height: 28px;
+            background: linear-gradient(#0a246a, #3a6ea5);
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+            cursor: move;
+            user-select: none;
+        }
+
+        .titlebar span {
+            flex: 1;
+            font-weight: bold;
+            font-size: 13px
+        }
+
+        .win-buttons {
+            display: flex;
+            gap: 4px
+        }
+
+        .win-btn {
+            width: 22px;
+            height: 20px;
+            border: 1px solid white;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+        }
+
+        .win-btn.min,
+        .win-btn.max {
+            background: #2b7cff
+        }
+
+        .win-btn.close {
+            background: #ff3b3b
+        }
+
+        .win-btn:hover {
+            filter: brightness(1.2)
+        }
+
+        .window-content {
+            padding: 8px;
+            background: white;
+            height: 300px;
+            overflow: auto
+        }
+
+        /* NOTEPAD */
+        .notepad-text {
+            width: 100%;
+            height: 100%;
+            resize: none;
+            border: none;
+            font-family: Tahoma;
+            font-size: 13px;
+            outline: none
+        }
+
+        /* DESKTOP */
+        .xp-desktop {
+            width: 100vw;
+            height: 100vh;
+            position: relative
+        }
+
+        .desktop-icon {
+            width: 74px;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            position: absolute;
+            cursor: pointer;
+            text-shadow: 1px 1px 2px black
+        }
+
+        .desktop-icon img {
+            width: 48px;
+            height: 48px
+        }
+
+        /* ================= TOUHOU ================= */
+        .touhou-screen {
+            width: 100%;
+            height: 100%;
+            background: black;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .character {
+            padding: 10px 20px;
+            border: 1px solid white;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        /* ================= ERROR ================= */
+        .error-popup {
+            position: absolute;
+            background: #ece9d8;
+            border: 1px solid #a40000;
+            width: 300px;
+            z-index: 2000;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, .6);
+        }
+
+        .error-title {
+            background: linear-gradient(#ff3a3a, #a40000);
+            color: white;
+            padding: 3px 6px;
+            font-weight: bold;
+        }
+
+        .error-body {
+            padding: 10px;
+        }
+
+        /* ================= ERROR ================= */
+        .error-popup {
+            position: absolute;
+            background: #ece9d8;
+            border: 1px solid #a40000;
+            width: 300px;
+            z-index: 2000;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, .6);
+        }
+
+        .error-title {
+            background: linear-gradient(#ff3a3a, #a40000);
+            color: white;
+            padding: 3px 6px;
+            font-weight: bold;
+        }
+
+        .error-body {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loadingScreen">
+        <img src="./assets/xp/logo.png">
+        <div class="container">
+            <div class="Loader"></div>
+            <div class="Loader"></div>
+            <div class="Loader"></div>
+        </div>
+    </div>
+
+    <div class="xp-desktop" id="desktop"></div>
+
+    <div class="start-menu" id="startMenu">
+        <div class="start-menu-header">Rémi ou Alexi probablement</div>
+        <div class="start-columns">
+            <div class="start-left">
+                <div class="start-item" onclick="openTouhou()">Touhou 12</div>
+                <div class="start-item" onclick="openRensenware()">Rensenware</div>
+            </div>
+            <div class="start-right">
+                <div class="start-item">THE GAME</div>
+                <div class="start-item">THE GAME</div>
+                <div class="start-item">THE GAME</div>
+            </div>
+        </div>
+    </div>
+    <div class="taskbar">
+        <div class="start-button" onclick="toggleStart()"><span>Démarrer</span></div>
+        <div class="task-buttons" id="taskButtons"></div>
+        <div class="taskbar-clock" id="clock"></div>
+    </div>
+
+    <script>
+
+        let zIndex = 20;
+        let filesEncrypted = false;
+        let touhouScore = 0;
+        let openFileWindows = [];
+        let windowsList = [];
+
+        setTimeout(() => {
+            document.getElementById('loadingScreen').classList.add('hide');
+        }, 2500);
+
+        /* CLOCK */
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+
+        /* START MENU */
+        function toggleStart() {
+            startMenu.classList.toggle('active');
+        }
+
+        /* ================= TASKBAR ================= */
+        function createTaskButton(win, title, icon = '/assets/xp/text.png') {
+            const btn = document.createElement('div');
+            btn.className = 'task-btn active';
+            btn.innerHTML = `<img src='${icon}'><span>${title}</span>`;
+
+            btn.onclick = () => {
+                if (win.style.display === 'none') {
+                    restoreWindow(win);
+                } else {
+                    setActiveWindow(win);
+                    win.style.zIndex = zIndex++;
+                }
+            };
+
+            document.getElementById('taskButtons').appendChild(btn);
+            win._taskBtn = btn;
+        }
+
+        function setActiveWindow(win) {
+            windowsList.forEach(w => w._taskBtn?.classList.remove('active'));
+            win._taskBtn?.classList.add('active');
+        }
+
+        /* ================= WINDOW ================= */
+        function createWindow(title, contentHTML, isFile = false, icon) {
+
+            const win = document.createElement('div');
+            win.className = 'window';
+            win.style.left = Math.random() * 300 + 'px';
+            win.style.top = Math.random() * 200 + 'px';
+            win.style.zIndex = zIndex++;
+
+            win.innerHTML = `
+<div class='titlebar'>
+              <span>${title}</span>
+<div class='win-buttons'>
+<div class='win-btn min'>_</div>
+<div class='win-btn max'>□</div>
+<div class='win-btn close'>X</div>
+              </div>
+            </div>
+<div class='window-content'>${contentHTML}</div>`;
+
+            createTaskButton(win, title, icon);
+            windowsList.push(win);
+
+            const btnMin = win.querySelector('.min');
+            const btnMax = win.querySelector('.max');
+            const btnClose = win.querySelector('.close');
+
+            btnMin.onclick = e => { e.stopPropagation(); minimizeWindow(win) };
+
+            let maximized = false;
+            let prev = {};
+
+            btnMax.onclick = e => {
+                e.stopPropagation();
+                if (!maximized) {
+                    prev = { left: win.style.left, top: win.style.top, width: win.style.width, height: win.style.height };
+                    win.style.left = '0'; win.style.top = '0';
+                    win.style.width = '100vw'; win.style.height = 'calc(100vh - 40px)';
+                    maximized = true;
+                } else {
+                    Object.assign(win.style, prev);
+                    maximized = false;
+                }
+            };
+
+            btnClose.onclick = e => {
+                e.stopPropagation();
+                win._taskBtn?.remove();
+                windowsList = windowsList.filter(w => w !== win);
+                openFileWindows = openFileWindows.filter(w => w !== win);
+                win.remove();
+            };
+
+            makeDraggable(win);
+
+            document.body.appendChild(win);
+
+            if (isFile) openFileWindows.push(win);
+
+            setActiveWindow(win);
+            return win;
+        }
+
+        /* MINIMIZE / RESTORE */
+        function minimizeWindow(win) {
+            win.style.display = 'none';
+            win._taskBtn.classList.remove('active');
+        }
+
+        function restoreWindow(win) {
+            win.style.display = 'block';
+            win.style.zIndex = zIndex++;
+            setActiveWindow(win);
+        }
+
+        /* ================= DRAG ================= */
+        function makeDraggable(win) {
+            const bar = win.querySelector('.titlebar');
+            let offX, offY, drag = false;
+
+            bar.addEventListener('mousedown', e => {
+                if (e.target.classList.contains('win-btn')) return;
+                drag = true; offX = e.offsetX; offY = e.offsetY;
+                setActiveWindow(win);
+                win.style.zIndex = zIndex++;
+            });
+
+            document.addEventListener('mousemove', e => {
+                if (!drag) return;
+                win.style.left = (e.clientX - offX) + 'px';
+                win.style.top = (e.clientY - offY) + 'px';
+            });
+
+            document.addEventListener('mouseup', () => drag = false);
+        }
+
+        /* ================= FILES ================= */
+        function createErrorPopup(msg) {
+            const p = document.createElement('div');
+            p.className = 'error-popup';
+            p.style.left = Math.random() * 400 + 'px';
+            p.style.top = Math.random() * 200 + 'px';
+            p.innerHTML = `
+            <div class="error-title">Erreur</div>
+            <div class="error-body">${msg}<br><br>
+    <button onclick="this.closest('.error-popup').remove()">OK</button></div>`;
+            document.body.appendChild(p);
+        }
+
+        function closeAllFileWindows() {
+            openFileWindows.forEach(w => {
+                w._taskBtn?.remove();
+                w.remove();
+            });
+            openFileWindows = [];
+        }
+
+        function createErrorPopup(msg) {
+            const p = document.createElement('div');
+            p.className = 'error-popup';
+            p.style.left = Math.random() * 400 + 'px';
+            p.style.top = Math.random() * 200 + 'px';
+            p.innerHTML = `
+            <div class="error-title">Erreur</div>
+            <div class="error-body">${msg}<br><br>
+    <button onclick="this.closest('.error-popup').remove()">OK</button></div>`;
+            document.body.appendChild(p);
+        }
+
+        function openImage(name) {
+            if (filesEncrypted) {
+                createErrorPopup('Fichier chiffré par Rensenware');
+                return;
+            }
+            createWindow(name, `<img src='/assets/xp/${name}' style='max-width:100%'>`, true, '/assets/xp/image1.png');
+        }
+
+        function openText(name, content) {
+            if (filesEncrypted) {
+                createErrorPopup('Impossible d\'ouvrir, fichier chiffré');
+                return;
+            }
+            createWindow(name, `<textarea class='notepad-text'>${content}</textarea>`, true, '/assets/xp/text.png');
+        }
+
+        /* RENSENWARE */
+        function openRensenware() {
+            startEncryption();
+            createWindow('Rensenware', `<h3>Vos fichiers ont été chiffrés</h3>
+                <p>Atteignez 0.2 milliard sur Touhou 12</p>`);
+        }
+        function startEncryption() {
+            filesEncrypted = true;
+            closeAllFileWindows();
+        }
+
+
+        /* TOUHOU */
+        function openTouhou() {
+            createWindow('Touhou 12', `<div class='touhou-screen' id='touhouScreen'>Loading...</div>`);
+
+            setTimeout(() => {
+                touhouTitle();
+            }, 1500);
+        }
+
+        function touhouTitle() {
+            touhouScreen.innerHTML = `<h1>Touhou 12</h1><p>Press any key</p>`;
+            window.onkeydown = () => touhouSelect();
+        }
+
+        function touhouSelect() {
+            touhouScreen.innerHTML = `
+                    <h2>Select Character</h2>
+                    <div class='character' onclick='startGame()'>Reimu</div>
+    <div class='character' onclick='startGame()'>Marisa</div>`;
+        }
+
+        function startGame() {
+            touhouScore += Math.floor(Math.random() * 50000000);
+            alert('Score: ' + touhouScore);
+            if (touhouScore >= 200000000) {
+                filesEncrypted = false;
+                alert('Fichiers restaurés');
+            }
+        }
+
+        /* ================= DESKTOP ICONS ================= */
+        function createIcon(x, y, img, label, action) {
+            const icon = document.createElement('div');
+            icon.className = 'desktop-icon';
+            icon.style.left = x + 'px';
+            icon.style.top = y + 'px';
+            icon.innerHTML = `<img src='/assets/xp/${img}'><br>${label}`;
+            icon.ondblclick = action;
+            desktop.appendChild(icon);
+        }
+
+        createIcon(20, 20, 'touhou.png', 'Touhou 12', openTouhou);
+        createIcon(20, 110, 'image1.png', 'Image 1', () => openImage('image1.png'));
+        createIcon(20, 200, 'image2.png', 'Image 2', () => openImage('image2.png'));
+        createIcon(20, 290, 'image3.png', 'Image 3', () => openImage('image3.png'));
+        createIcon(20, 380, 'text.png', 'Note.txt', () => openText('Note.txt', 'It is good'));
+        createIcon(20, 470, 'virus.png', 'Rensenware', openRensenware);
+
+    </script>
+
+</body>
+
+</html>
