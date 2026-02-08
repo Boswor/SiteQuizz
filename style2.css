@@ -1,0 +1,902 @@
+/* CSS is how you can add style to your website, such as colors, fonts, and positioning of your
+   HTML content. To learn how to do something, just try searching Google for questions like
+   "how to change link color." */
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap");
+
+body {
+    color: white;
+    font-family: Verdana;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+
+    height: 100vh;
+    width: 100vw;
+}
+
+body * {
+    cursor: none;
+}
+
+body:after {
+    content: "";
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 200px rgba(0, 0, 0, 0.9) inset;
+}
+
+.lunastra {
+    height: 300vh;
+    width: 200vw;
+
+    position: absolute;
+    top: 100%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    border: 2px solid red;
+}
+
+@keyframes rotate_space {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes rotate_space_rathian {
+    from {
+        transform: rotate(0deg) translate(-50%, -100%);
+    }
+
+    to {
+        transform: rotate-(-360deg) translate(-50%, -100%);
+    }
+}
+
+@keyframes rotate_space_rathian_a {
+    from {
+        transform: rotate(0deg) translate(-50%, -100%);
+    }
+
+    to {
+        transform: rotate(-360deg) translate(-50%, -100%);
+    }
+}
+
+@keyframes rotate_space_rathian_b {
+    from {
+        transform: rotate(-45deg) translate(-50%, -100%);
+    }
+
+    to {
+        transform: rotate(315deg) translate(-50%, -100%);
+    }
+}
+
+@keyframes rotate_space_rathian_c {
+    from {
+        transform: rotate(-100deg) translate(-50%, -100%);
+    }
+
+    to {
+        transform: rotate(260deg) translate(-50%, -100%);
+    }
+}
+
+@keyframes rotate_space_rathian_d {
+    from {
+        transform: rotate(-220deg) translate(-50%, -100%);
+    }
+
+    to {
+        transform: rotate(140deg) translate(-50%, -100%);
+    }
+}
+
+@keyframes rotate_space_rathian_e {
+    from {
+        transform: rotate(8deg) translate(-50%, -100%);
+    }
+
+    to {
+        transform: rotate(-352deg) translate(-50%, -100%);
+    }
+}
+
+@keyframes rotate_space_rathian_f {
+    from {
+        transform: rotate(310deg) translate(-50%, -100%);
+    }
+
+    to {
+        transform: rotate(-50deg) translate(-50%, -100%);
+    }
+}
+
+@keyframes rotate_space_rathian_g {
+    from {
+        transform: rotate(75deg) translate(-50%, -100%);
+    }
+
+    to {
+        transform: rotate(-285deg) translate(-50%, -100%);
+    }
+}
+
+@keyframes rotate_space_rathian_h {
+    from {
+        transform: rotate(180deg) translate(-50%, -100%);
+    }
+
+    to {
+        transform: rotate(-180deg) translate(-50%, -100%);
+    }
+}
+
+@keyframes rotate_space_rathian_i {
+    from {
+        transform: rotate(-100deg) translate(-50%, -100%);
+    }
+
+    to {
+        transform: rotate(-460deg) translate(-50%, -100%);
+    }
+}
+
+
+.lunastra::before {
+    content: '';
+    position: absolute;
+    height: 10px;
+    width: 10px;
+    border-radius: 42%;
+    border: 1px solid magenta;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.new_world {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    transform-origin: center;
+    pointer-events: none;
+
+    /* animation: 360s linear 0 rotate_space;
+  animation-iteration-count: infinite;*/
+
+    background: url('./assets/e/space.jpg');
+    background-size: cover;
+}
+
+.rathian {
+    position: absolute;
+    height: 100vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    transform-origin: bottom center;
+}
+
+.caedus {
+    height: auto;
+    width: 700px;
+    font-size: 30px;
+    color: turquoise;
+}
+
+.caedus2 {
+    position: absolute;
+    left: 0;
+    top: 15vh;
+}
+
+.caedus path {
+    fill: transparent;
+}
+
+.charge_blade {
+    margin-top: 10vh;
+
+    font-family: "Sixtyfour Convergence", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+        "BLED" 0,
+        "SCAN" 0,
+        "XELA" 0,
+        "YELA" 0;
+}
+
+.konchu {
+    min-height: 75px;
+    min-width: 75px;
+    border-radius: 00%;
+    /* background: yellow; */
+}
+
+.rathalos {
+    animation: color_random 4s linear infinite;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    position: relative;
+    margin-top: 20vh;
+    white-space: nowrap;
+}
+
+.rathalos h2 {
+    /*   color: white; */
+    font-size: 250px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    margin: 0;
+}
+
+.rathalos .rouge {
+    color: transparent;
+    -webkit-text-stroke: 2px red;
+}
+
+.rathalos .azur {
+    color: red;
+    -webkit-text-stroke: 2px red;
+    animation: waves 4s ease-in-out infinite;
+}
+
+@keyframes waves {
+
+    0%,
+    100% {
+        clip-path: polygon(0% 45%,
+                16% 44%,
+                33% 50%,
+                54% 60%,
+                70% 61%,
+                84% 59%,
+                100% 52%,
+                100% 100%,
+                0% 100%);
+    }
+
+    50% {
+        clip-path: polygon(0% 60%,
+                15% 65%,
+                34% 66%,
+                51% 62%,
+                67% 50%,
+                84% 45%,
+                100% 46%,
+                100% 100%,
+                0% 100%);
+    }
+}
+
+
+/*https://codepen.io/sam959/pen/LYojLBm*/
+.reine_selta {
+    margin-top: 5vh;
+
+    background: transparent;
+    position: relative;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: oswald;
+    font-weight: bold;
+    filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 1));
+
+    font-size: 150px;
+}
+
+.reine_selta_alpha {
+    margin-top: 10vh;
+}
+
+.reine_selta .selta {
+    background: -webkit-linear-gradient(90deg, orange, blue);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: 11;
+    animation: wavy 1.3s ease infinite;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.pikachu,
+.snowbull {
+    z-index: 9999;
+    opacity: 0.5;
+    position: fixed;
+    background: linear-gradient(to right, white, transparent);
+    top: 0;
+    height: 100vh;
+    width: 150px;
+    left: 0;
+    border: none;
+}
+
+.snowbull {
+    right: 0;
+    left: initial;
+    background: linear-gradient(to left, white, transparent);
+}
+
+@keyframes wavy {
+    0% {
+        top: 0px;
+    }
+
+    50% {
+        top: -15px;
+    }
+
+    100% {
+        top: 0px;
+    }
+}
+
+.kecha_wacha {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 10;
+    background: url('./assets/e/navette.png');
+    filter: invert(0) brightness(15%) sepia(90%) saturate(58) hue-rotate(-323deg);
+    background-size: cover;
+
+    aspect-ratio: 928 / 352;
+    width: 175px;
+    transform-origin: center;
+
+    transition: all .3s linear;
+
+}
+
+.rathian:has(.voltobre),
+.rathian:has(.ronflex) {
+    animation: rotate_space_rathian_a 35s linear infinite;
+}
+
+.rathian:has(.voltobre).zarbi-A {
+    animation: rotate_space_rathian_b 27s linear infinite;
+}
+
+.rathian:has(.voltobre).zarbi-B {
+    animation: rotate_space_rathian_c 34s linear infinite;
+}
+
+.rathian:has(.voltobre).zarbi-C {
+    animation: rotate_space_rathian_d 24s linear infinite;
+}
+
+.rathian:has(.voltobre).zarbi-D {
+    animation: rotate_space_rathian_e 50s linear infinite;
+}
+
+.rathian:has(.voltobre).zarbi-E {
+    animation: rotate_space_rathian_f 34s linear infinite;
+}
+
+.rathian:has(.voltobre).zarbi-F {
+    animation: rotate_space_rathian_g 33.5s linear infinite;
+}
+
+.rathian:has(.voltobre).zarbi-G {
+    animation: rotate_space_rathian_h 42.8s linear infinite;
+}
+
+.rathian:has(.voltobre).zarbi-I {
+    animation: rotate_space_rathian_i 47.25s linear infinite;
+}
+
+.voltobre {
+    transform: scale(0.7);
+    animation: scale_random 7s linear infinite;
+}
+
+.ronflex {
+    transform: scale(1.2);
+    animation: scale_random_big 9s linear infinite;
+}
+
+.voltobre-shiny {
+    animation-delay: -2s;
+}
+
+.voltobre-shiny .electrode {
+    animation-delay: -1.5s;
+}
+
+.electrode {
+    filter: invert(0) brightness(15%) sepia(90%) saturate(58) hue-rotate(-323deg);
+    animation: color_random 4s linear infinite;
+}
+
+.giginox .electrode {
+    transform: scale(-1, 1);
+}
+
+
+@keyframes color_random {
+    0% {
+        filter: invert(0) brightness(15%) sepia(90%) saturate(58) hue-rotate(-323deg);
+    }
+
+    50% {
+        filter: invert(0) brightness(15%) sepia(90%) saturate(58) hue-rotate(0deg);
+    }
+
+    100% {
+        filter: invert(0) brightness(15%) sepia(90%) saturate(58) hue-rotate(-322deg);
+    }
+}
+
+@keyframes scale_random {
+    0% {
+        transform: scale(0.15) rotate(-15deg);
+    }
+
+    50% {
+        transform: scale(0.05) rotate(15deg);
+    }
+
+    100% {
+        transform: scale(0.15) rotate(-15deg);
+    }
+}
+
+@keyframes scale_random_big {
+    0% {
+        transform: scale(1) rotate(50deg);
+    }
+
+    50% {
+        transform: scale(1.15) rotate(40deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(50deg);
+    }
+}
+
+
+/* planet */
+/* exemple html : 
+      <a href="#" class="bodyplanet1">	
+				<div class="atmosphere1">
+					<div class="planet planet1"></div>
+				</div>
+			</a>
+*/
+
+.planet {
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+
+    -moz-box-shadow: inset -21px 8px 45px 10px #1c1916;
+    -webkit-box-shadow: inset -21px 8px 45px 10px #1c1916;
+    -o-box-shadow: inset -21px 8px 45px 10px #1c1916;
+    box-shadow: inset -21px 8px 45px 10px #1c1916;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color=#1C1916, Direction=116, Strength=50);
+
+}
+
+a:hover .atmosphere1,
+a:hover .atmosphere2,
+a:hover .atmosphere3 {
+    -moz-box-shadow: 0px 0px 30px 0px rgba(100, 235, 59, 0.9);
+    -webkit-box-shadow: 0px 0px 30px 0px rgba(100, 235, 59, 0.9);
+    -o-box-shadow: 0px 0px 30px 0px rgba(100, 235, 59, 0.9);
+    box-shadow: 0px 0px 30px 0px rgba(100, 235, 59, 0.9);
+}
+
+.planet1 {
+    background-image: url('./assets/e/planet1.jpg');
+    background-size: cover;
+
+    width: 100px;
+    height: 100px;
+
+    animation: rotate_plane 15s linear infinite;
+
+    -ms-transform: rotate(7deg);
+    /* IE 9 */
+    -webkit-transform: rotate(7deg);
+    /* Safari */
+    transform: rotate(7deg);
+}
+
+
+.atmosphere1 {
+
+
+    -moz-box-shadow: 0px 0px 30px 0px rgba(100, 55, 109, 0.7);
+    -webkit-box-shadow: 0px 0px 30px 0px rgba(100, 55, 109, 0.7);
+    -o-box-shadow: 0px 0px 30px 0px rgba(100, 55, 109, 0.7);
+    box-shadow: 0px 0px 30px 0px rgba(100, 55, 109, 0.7);
+    width: 100px;
+    height: 100px;
+
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+}
+
+/* ----- ------ ------ -----PLANETE NUMERO 2----- ----- ----- ----- */
+.planet2 {
+    background-image: url('./assets/e/planet2.png');
+    background-size: cover;
+
+    width: 300px;
+    height: 300px;
+
+    animation: rotate_plane 23s linear infinite;
+
+    -ms-transform: rotate(-5deg);
+    /* IE 9 */
+    -webkit-transform: rotate(-5deg);
+    /* Safari */
+    transform: rotate(-5deg);
+}
+
+.bodyplanet2 {
+    position: absolute;
+    top: 300px;
+    left: 300px;
+
+}
+
+.atmosphere2 {
+
+
+    -webkit-transition: width 2s, height 2s;
+    /* Safari */
+    transition: width 2s, height 2s;
+
+    -moz-box-shadow: 0px 0px 30px 0px rgba(119, 79, 232, 0.7);
+    -webkit-box-shadow: 0px 0px 30px 0px rgba(119, 79, 232, 0.7);
+    -o-box-shadow: 0px 0px 30px 0px rgba(119, 79, 232, 0.7);
+    box-shadow: 0px 0px 30px 0px rgba(119, 79, 232, 0.7);
+    width: 300px;
+    height: 300px;
+
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+}
+
+
+/* ----- ------ ------ -----PLANETE NUMERO 3----- ----- ----- ----- */
+.planet3 {
+    background-image: url('./assets/e/planet3.jpg');
+    background-size: cover;
+
+    width: 400px;
+    height: 400px;
+
+    animation: rotate_plane 12s linear infinite;
+
+    -ms-transform: rotate(11deg);
+    /* IE 9 */
+    -webkit-transform: rotate(11deg);
+    /* Safari */
+    transform: rotate(11deg);
+}
+
+.bodyplanet3 {
+    position: absolute;
+    top: 400px;
+    left: 400px;
+}
+
+.atmosphere3 {
+
+
+    -moz-box-shadow: 0px 0px 30px 0px rgba(219, 79, 32, 0.7);
+    -webkit-box-shadow: 0px 0px 30px 0px rgba(219, 79, 32, 0.7);
+    -o-box-shadow: 0px 0px 30px 0px rgba(219, 79, 32, 0.7);
+    box-shadow: 0px 0px 30px 0px rgba(219, 79, 32, 0.7);
+    width: 400px;
+    height: 400px;
+
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+}
+
+/* Twinkle Animations > Twinkle 1 */
+
+@keyframes twinkle_one {
+
+    0%,
+    30%,
+    100% {
+        opacity: 1;
+    }
+
+    70% {
+        opacity: 0;
+    }
+}
+
+
+/* // Twinkle Animations > Twinkle 2 */
+
+@keyframes twinkle_two {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    25%,
+    80% {
+        opacity: 0;
+    }
+}
+
+
+
+
+/* // Twinkle Animations > Twinkle 3 */
+
+@keyframes twinkle_three {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    30%,
+    40% {
+        opacity: 0;
+    }
+}
+
+.galaxy {
+    z-index: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    margin: 0 auto;
+    background-color: transparent;
+}
+
+.star {
+    position: absolute;
+    background-color: white;
+}
+
+.star-type1 {
+    width: 1px;
+    height: 1px;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 0 1px 1px white;
+    box-shadow: 0 0 1px 1px white;
+    animation: twinkle_one 3s ease-in-out infinite;
+    -moz-animation: twinkle_one 3s ease-in-out infinite;
+    -o-animation: twinkle_one 3s ease-in-out infinite;
+    animation: twinkle_one 3s ease-in-out infinite;
+}
+
+.star-type2 {
+    width: 2px;
+    height: 2px;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 0 2px 1px white;
+    box-shadow: 0 0 2px 1px white;
+    -webkit-animation: twinkle_two 12s ease-in-out infinite;
+    -moz-animation: twinkle_two 12s ease-in-out infinite;
+    -o-animation: twinkle_two 12s ease-in-out infinite;
+    animation: twinkle_two 12s ease-in-out infinite;
+}
+
+.star-type3 {
+    width: 2px;
+    height: 2px;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 0 2px 0 white;
+    box-shadow: 0 0 2px 0 white;
+    -webkit-animation: twinkle_three 7s ease-in-out infinite;
+    -moz-animation: twinkle_three 7s ease-in-out infinite;
+    -o-animation: twinkle_three 7s ease-in-out infinite;
+    animation: twinkle_three 7s ease-in-out infinite;
+}
+
+
+/*ANIMATION */
+
+@keyframes opacity-back {
+    0% {
+        background-color: rgba(79, 110, 255, 0.1);
+    }
+
+    20% {
+        background-color: rgba(79, 110, 255, 0.5);
+    }
+
+    40% {
+        background-color: rgba(79, 110, 255, 0.1);
+    }
+
+    45% {
+        background-color: rgba(79, 110, 255, 0.2);
+    }
+
+    46% {
+        background-color: rgba(79, 110, 255, 0.1);
+    }
+
+    47% {
+        background-color: rgba(79, 110, 255, 0.5);
+    }
+
+    49% {
+        background-color: rgba(79, 110, 255, 0.1);
+    }
+
+    50% {
+        background-color: rgba(79, 110, 255, 0.1);
+    }
+
+    51% {
+        background-color: rgba(79, 110, 255, 0.3);
+    }
+
+    60% {
+        background-color: rgba(79, 110, 255, 0.5);
+    }
+
+    80% {
+        background-color: rgba(79, 110, 255, 0.1);
+    }
+
+    100% {
+        background-color: rgba(79, 110, 255, 0.5);
+    }
+
+}
+
+@keyframes rotate_plane {
+    0% {
+        background-position: 0px;
+    }
+
+    100% {
+        background-position: 1024px;
+    }
+}
+
+/* endplanet */
+
+
+/* https://codepen.io/RitamChakraborty/pen/poZgOyP */
+
+
+.BrushCursor .container {
+    height: 100%;
+    width: 100%;
+}
+
+.BrushCursor .p {
+    position: absolute;
+    font-size: 35px;
+    font-family: sans-serif;
+    font-weight: bold;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+}
+
+.BrushCursor .p1 {
+    text-shadow: 1px 1px 1px black, -1px -1px 1px black;
+    color: chartreuse;
+}
+
+.BrushCursor .p2 {
+    color: magenta;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    animation: text-animation 3s ease-in-out forwards alternate infinite;
+    text-shadow: 1px 1px 1px black, -1px -1px 1px black;
+}
+
+.BrushCursor .p3 {
+    height: 20%;
+    color: transparent;
+}
+
+@keyframes text-animation {
+    from {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    }
+
+    to {
+        clip-path: polygon(0 0, 0% 1%, 0% 100%, 0% 100%);
+    }
+}
+
+.BrushCursor .cursor {
+    display: none;
+    position: absolute;
+    top: 50%;
+    height: 100%;
+    width: 100%;
+    transform: translate(0, -50%);
+    border-right: 2px solid red;
+    animation: cursor-animation 3s ease-in-out forwards alternate infinite;
+}
+
+@keyframes cursor-animation {
+    from {
+        width: 100%;
+    }
+
+    to {
+        width: 0;
+    }
+}
+
+.BrushCursor1 {
+    margin-top: 60vh;
+}
+
+.BrushCursor2 .p {
+    transform: translateY(10px);
+}
+
+.BrushCursor2 .p1 {
+    color: thistle;
+}
+
+.BrushCursor2 .p2 {
+    color: orangered;
+}
+
+
+.BrushCursor3 .p {
+    transform: translateY(24.25px);
+}
+
+.BrushCursor3 .p1 {
+    color: darkorange;
+}
+
+.BrushCursor3 .p2 {
+    color: cornsilk;
+}
+
+/*fin https://codepen.io/RitamChakraborty/pen/poZgOyP */
+
+.amongus {
+    position: relative;
+    top: -10vh;
+    animation: rotate_space 1s linear infinite;
+}
+
+.popo {
+    position: relative;
+    top: -12vh;
+    animation: rotate_space 4s linear infinite;
+}
