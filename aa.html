@@ -283,7 +283,7 @@
 
         .titlebar {
             height: 28px;
-            background: linear-gradient(#0a246a, #3a6ea5);
+            background: linear-gradient(to bottom, #4094ff 0%, #0056e4 13%, #0056e4 71%, #16428b 100%);
             color: white;
             display: flex;
             align-items: center;
@@ -437,13 +437,13 @@
             position: absolute;
             background: #ece9d8;
             border: 1px solid #003c74;
-            width: 340px;
+            width: 460px;
             z-index: 2000;
             box-shadow: 2px 2px 8px rgba(0, 0, 0, .6);
         }
 
         .error-title {
-            background: linear-gradient(#0a246a, #3a6ea5);
+            background: linear-gradient(to bottom, #4094ff 0%, #0056e4 13%, #0056e4 71%, #16428b 100%);
             color: white;
             padding: 3px 6px;
             font-weight: bold;
@@ -464,6 +464,7 @@
             display: flex;
             align-items: center;
             padding-bottom: 50px;
+            text-align: center;
             gap: 20px;
         }
 
@@ -621,7 +622,7 @@
                 win.remove();
             };
 
-            makeDraggable(win);
+            makeDraggable(win, title == "Rensenware");
 
             document.body.appendChild(win);
 
@@ -644,7 +645,7 @@
         }
 
         /* ================= DRAG ================= */
-        function makeDraggable(win) {
+        function makeDraggable(win, glitch = false) {
             const bar = win.querySelector('.titlebar');
             let offX, offY, drag = false;
 
@@ -657,8 +658,22 @@
 
             document.addEventListener('mousemove', e => {
                 if (!drag) return;
+
+
+                if (glitch && typeof win.style.left != 'undefined') {
+                    const ghost = win.cloneNode(true);
+                    ghost.classList.add("ghost");
+                    ghost.style.left = win.style.left;
+                    ghost.style.top = win.style.top;
+                    ghost.style.zIndex = 999;
+                    document.body.appendChild(ghost);
+
+                    setTimeout(() => ghost.remove(), 300);
+                }
+
                 win.style.left = (e.clientX - offX) + 'px';
                 win.style.top = (e.clientY - offY) + 'px';
+
             });
 
             document.addEventListener('mouseup', () => drag = false);
@@ -686,7 +701,7 @@
             btnClose.onclick = e => {
                 p.remove();
             };
-            makeDraggable(p);
+            makeDraggable(p, true);
         }
 
         function closeAllFileWindows() {
@@ -699,7 +714,7 @@
 
         function openImage(name) {
             if (filesEncrypted) {
-                createErrorPopup('Fichier chiffré par Rensenware');
+                createErrorPopup('Impossible d\'ouvrir, fichier chiffré par Rensenware :(');
                 return;
             }
             createWindow(name, `<img src='/assets/xp/${name}' style='max-width:100%'>`, true, '/assets/xp/' + name);
@@ -707,7 +722,7 @@
 
         function openText(name, content) {
             if (filesEncrypted) {
-                createErrorPopup('Impossible d\'ouvrir, fichier chiffré');
+                createErrorPopup('Impossible d\'ouvrir, fichier chiffré par Rensenware :(');
                 return;
             }
             createWindow(name, `<textarea class='notepad-text'>${content}</textarea>`, true, '/assets/xp/text.png');
