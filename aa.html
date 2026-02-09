@@ -261,7 +261,8 @@
         /* WINDOWS */
         .window {
             position: absolute;
-            width: 520px;
+            max-width: 520px;
+            min-width: 300px;
             background: #ece9d8;
             border: 1px solid #003c74;
             box-shadow: 3px 3px 6px rgba(0, 0, 0, .6);
@@ -318,40 +319,82 @@
 
         .win-btn.min,
         .win-btn.max {
-            background: #2b7cff
+            background: #2b7cff;
         }
 
         .win-btn.close {
-            background: #ff3b3b
+            background: #ff3b3b;
         }
 
         .win-btn:hover {
-            filter: brightness(1.2)
+            filter: brightness(1.2);
         }
 
         .window-content {
             padding: 8px;
             background: white;
-            height: 300px;
-            overflow: auto
+            max-height: 500px;
+            min-height: 200px;
+            overflow: hidden;
+        }
+
+        .window:has(.touhou-screen) {
+            width: 600px;
+            max-width: 600px;
+        }
+
+        .window-content:has(.touhou-screen) {
+            height: 480px;
+        }
+
+        .window-content img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .window.maximized {
+            left: 0 !important;
+            top: 0 !important;
+            width: 100vw !important;
+            height: calc(100vh - 68px) !important;
+            min-width: unset !important;
+            max-width: unset !important;
+        }
+
+        .window.maximized .window-content {
+            width: 100% !important;
+            height: 100% !important;
+            min-height: unset !important;
+            max-height: unset !important;
+        }
+
+        .window:has(.rensenware) .win-btn.close {
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        .window-content:has(.rensenware) {
+            padding: 0;
         }
 
         /* NOTEPAD */
         .notepad-text {
             width: 100%;
             height: 100%;
+            min-height: 200px;
             resize: none;
             border: none;
             font-family: Tahoma;
             font-size: 13px;
-            outline: none
+            outline: none;
+            overflow: auto;
         }
 
         /* DESKTOP */
         .xp-desktop {
             width: 100vw;
             height: 100vh;
-            position: relative
+            position: relative;
         }
 
         .desktop-icon {
@@ -393,42 +436,62 @@
         .error-popup {
             position: absolute;
             background: #ece9d8;
-            border: 1px solid #a40000;
-            width: 300px;
+            border: 1px solid #003c74;
+            width: 340px;
             z-index: 2000;
             box-shadow: 2px 2px 8px rgba(0, 0, 0, .6);
         }
 
         .error-title {
-            background: linear-gradient(#ff3a3a, #a40000);
+            background: linear-gradient(#0a246a, #3a6ea5);
             color: white;
             padding: 3px 6px;
             font-weight: bold;
         }
 
-        .error-body {
-            padding: 10px;
+        .error-body::before {
+            content: '';
+            width: 40px;
+            height: 40px;
+            background-image: url(assets/xp/error.png);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
         }
 
-        /* ================= ERROR ================= */
-        .error-popup {
+        .error-body {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            padding-bottom: 50px;
+            gap: 20px;
+        }
+
+        .error-popup button {
             position: absolute;
-            background: #ece9d8;
-            border: 1px solid #a40000;
-            width: 300px;
-            z-index: 2000;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, .6);
+            width: 100px;
+            height: 27px;
+            background-color: #e8e8d8;
+            border: 1px solid #2b2b2b;
+            box-shadow: inset -1px -1px 2px rgba(0, 0, 0, 0.7);
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+
         }
 
-        .error-title {
-            background: linear-gradient(#ff3a3a, #a40000);
-            color: white;
-            padding: 3px 6px;
-            font-weight: bold;
+        .error-popup button:focus>span {
+            border: 1px dotted #000;
         }
 
-        .error-body {
-            padding: 10px;
+        .error-popup button span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            margin-top: -2px;
+
         }
     </style>
 </head>
@@ -450,7 +513,6 @@
         <div class="start-menu-header">Rémi ou Alexi probablement</div>
         <div class="start-columns">
             <div class="start-left">
-                <div class="start-item" onclick="openTouhou()">Touhou 12</div>
                 <div class="start-item" onclick="openRensenware()">Rensenware</div>
             </div>
             <div class="start-right">
@@ -541,19 +603,13 @@
 
             btnMin.onclick = e => { e.stopPropagation(); minimizeWindow(win) };
 
-            let maximized = false;
-            let prev = {};
 
             btnMax.onclick = e => {
                 e.stopPropagation();
-                if (!maximized) {
-                    prev = { left: win.style.left, top: win.style.top, width: win.style.width, height: win.style.height };
-                    win.style.left = '0'; win.style.top = '0';
-                    win.style.width = '100vw'; win.style.height = 'calc(100vh - 40px)';
-                    maximized = true;
+                if (!win.classList.contains("maximized")) {
+                    win.classList.add("maximized");
                 } else {
-                    Object.assign(win.style, prev);
-                    maximized = false;
+                    win.classList.remove("maximized");
                 }
             };
 
@@ -615,10 +671,22 @@
             p.style.left = Math.random() * 400 + 'px';
             p.style.top = Math.random() * 200 + 'px';
             p.innerHTML = `
-            <div class="error-title">Erreur</div>
+            <div class="error-title titlebar">
+                <span>Fatal error</span>
+                <div class='win-buttons'>
+                    <div class='win-btn close'>X</div>
+                </div>
+            </div>
             <div class="error-body">${msg}<br><br>
-    <button onclick="this.closest('.error-popup').remove()">OK</button></div>`;
+    <button onclick="this.closest('.error-popup').remove()"><span>OK</span></button></div>`;
             document.body.appendChild(p);
+
+            const btnClose = p.querySelector('.close');
+
+            btnClose.onclick = e => {
+                p.remove();
+            };
+            makeDraggable(p);
         }
 
         function closeAllFileWindows() {
@@ -629,24 +697,12 @@
             openFileWindows = [];
         }
 
-        function createErrorPopup(msg) {
-            const p = document.createElement('div');
-            p.className = 'error-popup';
-            p.style.left = Math.random() * 400 + 'px';
-            p.style.top = Math.random() * 200 + 'px';
-            p.innerHTML = `
-            <div class="error-title">Erreur</div>
-            <div class="error-body">${msg}<br><br>
-    <button onclick="this.closest('.error-popup').remove()">OK</button></div>`;
-            document.body.appendChild(p);
-        }
-
         function openImage(name) {
             if (filesEncrypted) {
                 createErrorPopup('Fichier chiffré par Rensenware');
                 return;
             }
-            createWindow(name, `<img src='/assets/xp/${name}' style='max-width:100%'>`, true, '/assets/xp/image1.png');
+            createWindow(name, `<img src='/assets/xp/${name}' style='max-width:100%'>`, true, '/assets/xp/' + name);
         }
 
         function openText(name, content) {
@@ -660,8 +716,8 @@
         /* RENSENWARE */
         function openRensenware() {
             startEncryption();
-            createWindow('Rensenware', `<h3>Vos fichiers ont été chiffrés</h3>
-                <p>Atteignez 0.2 milliard sur Touhou 12</p>`);
+            createIcon(20, 470, 'touhou.png', 'Touhou 12', openTouhou);
+            createWindow('Rensenware', `<img class="rensenware" src='/assets/xp/rensenware.png' style='max-width:100%'>`, false, '/assets/xp/virus.png');
         }
         function startEncryption() {
             filesEncrypted = true;
@@ -671,7 +727,7 @@
 
         /* TOUHOU */
         function openTouhou() {
-            createWindow('Touhou 12', `<div class='touhou-screen' id='touhouScreen'>Loading...</div>`);
+            createWindow('Touhou 12', `<div class='touhou-screen' id='touhouScreen'>Loading...</div>`, false, '/assets/xp/touhou.png');
 
             setTimeout(() => {
                 touhouTitle();
@@ -710,12 +766,11 @@
             desktop.appendChild(icon);
         }
 
-        createIcon(20, 20, 'touhou.png', 'Touhou 12', openTouhou);
-        createIcon(20, 110, 'image1.png', 'Image 1', () => openImage('image1.png'));
-        createIcon(20, 200, 'image2.png', 'Image 2', () => openImage('image2.png'));
-        createIcon(20, 290, 'image3.png', 'Image 3', () => openImage('image3.png'));
-        createIcon(20, 380, 'text.png', 'Note.txt', () => openText('Note.txt', 'It is good'));
-        createIcon(20, 470, 'virus.png', 'Rensenware', openRensenware);
+        createIcon(20, 20, 'image1.png', 'Image 1', () => openImage('image1.png'));
+        createIcon(20, 110, 'image2.png', 'Image 2', () => openImage('image2.png'));
+        createIcon(20, 200, 'image3.png', 'Image 3', () => openImage('image3.png'));
+        createIcon(20, 290, 'text.png', 'Note.txt', () => openText('Note.txt', 'it is good'));
+        createIcon(20, 380, 'virus.png', 'Rensenware', openRensenware);
 
     </script>
 
