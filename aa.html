@@ -339,13 +339,19 @@
         }
 
         .window:has(.touhou-screen) {
-            width: 600px;
-            max-width: 600px;
+            width: 640px;
+            max-width: 640px;
         }
 
         .window-content:has(.touhou-screen) {
             height: 480px;
+            padding: 0;
         }
+
+        .window:has(.touhou-screen) .win-btn {
+            display: none;
+        }
+
 
         .window-content img {
             width: 100%;
@@ -416,20 +422,227 @@
         .touhou-screen {
             width: 100%;
             height: 100%;
-            background: black;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+            overflow: hidden;
+            position: relative;
+            background: #000;
         }
 
-        .character {
-            padding: 10px 20px;
-            border: 1px solid white;
-            margin: 5px;
-            cursor: pointer;
+        .touhou-screen .loading-screen {
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .touhou-screen .loading-screen.active {
+            opacity: 1;
+        }
+
+        .touhou-screen .loading-text {
+            position: absolute;
+            right: 110px;
+            bottom: 85px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            transition-delay: 0.2s;
+            z-index: 1;
+        }
+
+        .touhou-screen .loading-screen.active .loading-text {
+            opacity: 1;
+
+        }
+
+        .touhou-screen .loading-text-en {
+            position: absolute;
+            right: -108px;
+            bottom: 69px;
+            opacity: 0;
+            transition: right 0.1s linear, opacity 0.2s ease-in-out;
+            transition-delay: 0.3s;
+            z-index: 1;
+        }
+
+        .touhou-screen .loading-screen.active .loading-text-en {
+            opacity: 1;
+            right: 58px;
+
+        }
+
+
+        .touhou-screen .loading-screen.active .loading-text img {
+            animation: twinkle 1s linear infinite;
+            animation-delay: 2.5s;
+        }
+
+        .touhou-screen .loading-screen.active .loading-text-en img {
+            animation: twinkle 1s linear infinite;
+            animation-delay: 1s;
+        }
+
+        .touhou-screen .particles {
+            position: absolute;
+            bottom: 70px;
+            right: 40px;
+            width: 200px;
+            height: 75px;
+        }
+
+        .touhou-screen .particle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-image: url("assets/xp/touhou/loading_flower.png");
+            background-size: contain;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+
+        @keyframes twinkle {
+
+            0%,
+            10%,
+            100% {
+                opacity: 1;
+            }
+
+            70% {
+                opacity: 0.2;
+            }
+        }
+
+        .touhou-screen .title-screen {
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            transition-delay: 0.1s;
+        }
+
+        .touhou-screen .reimu {
+            position: absolute;
+            opacity: 0;
+            top: -3px;
+            left: 100%;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.5s ease-in-out, left 1s cubic-bezier(0.17, 0.84, 0.44, 1.00);
+            transition-delay: 1s;
+        }
+
+        .touhou-screen .title-screen.active {
+            opacity: 1;
+        }
+
+        .touhou-screen .title-screen.active .reimu {
+            opacity: 1;
+            left: 0;
+        }
+
+        .touhou-screen .menu {
+            position: absolute;
+            opacity: 0;
+            top: 120px;
+            right: 30px;
+            transition: opacity 0.53s ease-in-out;
+            transition-delay: 2s;
+            background: linear-gradient(177deg, rgba(228, 251, 230, 0) 0%, rgba(228, 251, 230, 1) 30%, rgba(228, 251, 230, 1) 70%, rgba(228, 251, 230, 0) 100%);
+        }
+
+        .touhou-screen .title-screen.active .menu {
+            opacity: 1;
+        }
+
+        .touhou-screen .menu img {
+            display: block;
+        }
+
+        .touhou-screen .menu-useless {
+            padding: 10px;
+        }
+
+        .touhou-screen .menu-green {
+            position: relative;
+            filter: brightness(0) invert(1);
+            transition: filter 0.3s ease-in-out, top 0.3s ease-in-out;
+            transition-delay: 2.2s;
+            top: 0;
+        }
+
+        .touhou-screen .title-screen.active .menu-green {
+            top: -10px;
+            filter: unset;
+
+        }
+
+        .touhou-screen .menu:after {
+            content: '';
+            background-image: url(./assets/xp/touhou/lines.png);
+            width: 200px;
+            height: 90px;
+            position: absolute;
+            top: -45px;
+            right: -35px;
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.6;
+        }
+
+        .touhou-screen .other-texts {
+            position: absolute;
+            opacity: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.5s ease-in-out;
+            transition-delay: 2.5s;
+            pointer-events: none;
+        }
+
+        .touhou-screen .title-screen.active .other-texts {
+            opacity: 1;
+        }
+
+        .touhou-screen .other-texts__copystrike {
+            position: absolute;
+            left: 10px;
+            bottom: 20px;
+            width: auto;
+            height: auto;
+        }
+
+        .touhou-screen .other-texts__version {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 40px;
+            width: auto;
+            height: auto;
+        }
+
+        .touhou-screen .other-texts__title {
+            position: absolute;
+            right: 5px;
+            bottom: 5px;
+        }
+
+        .touhou-screen .other-texts__title:after {
+            content: '';
+            background-image: url(./assets/xp/touhou/lines2.png);
+            width: 100%;
+            height: 90px;
+            position: absolute;
+            top: -33px;
+            left: 5px;
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .touhou-screen .other-texts__title img {
+            z-index: 1;
+            position: relative;
         }
 
         /* ================= ERROR ================= */
@@ -494,10 +707,63 @@
             margin-top: -2px;
 
         }
+
+        body {
+            position: relative;
+        }
+
+        body:after {
+            content: '';
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            z-index: 9999;
+            cursor: pointer;
+            transition-delay: 2s;
+
+        }
+
+
+        body:before {
+            content: '';
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            z-index: 10000;
+            background-image: url(./assets/xp/power-button.svg);
+            background-size: 300px 300px;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+        }
+
+        body.nothing:after,
+        body.nothing:before {
+            pointer-events: all;
+            opacity: 1;
+        }
     </style>
 </head>
 
-<body>
+<body class="nothing">
 
     <div id="loadingScreen">
         <img src="./assets/xp/logo.png">
@@ -530,6 +796,15 @@
     </div>
 
     <script>
+        let sounds = {
+            boot: new Audio("assets/xp/sounds/boot.mp3"),
+            start: new Audio("assets/xp/sounds/start.wav"),
+            error: new Audio("assets/xp/sounds/error.wav"),
+            clic: new Audio("assets/xp/sounds/clic.wav"),
+            warning: new Audio("assets/xp/sounds/warning.wav"),
+            good: new Audio("assets/xp/sounds/good.mp3"),
+            tada: new Audio("assets/xp/sounds/tada.wav"),
+        };
 
         let zIndex = 20;
         let filesEncrypted = false;
@@ -537,17 +812,42 @@
         let openFileWindows = [];
         let windowsList = [];
 
-        setTimeout(() => {
-            document.getElementById('loadingScreen').classList.add('hide');
-        }, 2500);
 
-        /* CLOCK */
-        setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-        }, 1000);
+        document.addEventListener('DOMContentLoaded', () => {
+
+            window.addEventListener("click", (e) => {
+                document.body.classList.remove("nothing");
+                playSound("boot");
+
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').classList.add('hide');
+                    playSound("start");
+                }, 7500);
+
+                /* CLOCK */
+                setInterval(() => {
+                    document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+                }, 1000);
+
+                createIcon(20, 20, 'image1.png', 'Image 1', () => openImage('image1.png'));
+                createIcon(20, 110, 'image2.png', 'Image 2', () => openImage('image2.png'));
+                createIcon(20, 200, 'image3.png', 'Image 3', () => openImage('image3.png'));
+                createIcon(20, 290, 'text.png', 'good document.txt', () => openText('good document.txt', 'it is good'));
+                createIcon(20, 380, 'virus.png', 'Rensenware', openRensenware);
+            }, { once: true });
+        });
+
+        function playSound(name) {
+            const s = sounds[name];
+            if (!s) return;
+            s.currentTime = 0;
+            s.play();
+        }
+
 
         /* START MENU */
         function toggleStart() {
+            playSound("clic");
             startMenu.classList.toggle('active');
         }
 
@@ -577,6 +877,8 @@
 
         /* ================= WINDOW ================= */
         function createWindow(title, contentHTML, isFile = false, icon) {
+            let isRensenware = title == "Rensenware";
+            playSound(isRensenware ? "warning" : "clic");
 
             const win = document.createElement('div');
             win.className = 'window';
@@ -586,7 +888,7 @@
 
             win.innerHTML = `
 <div class='titlebar'>
-              <span>${title}</span>
+              <span>${title + (isRensenware ? " ⁽ˢᶦ ˢᶦ ᶜᵃ ᵉˣᶦˢᵗᵉ ᵖᵒᵘʳ ᵈᵉ ᵛʳᵃᶦ⁾" : "")}</span>
 <div class='win-buttons'>
 <div class='win-btn min'>_</div>
 <div class='win-btn max'>□</div>
@@ -622,7 +924,7 @@
                 win.remove();
             };
 
-            makeDraggable(win, title == "Rensenware");
+            makeDraggable(win, isRensenware);
 
             document.body.appendChild(win);
 
@@ -681,6 +983,8 @@
 
         /* ================= FILES ================= */
         function createErrorPopup(msg) {
+            playSound("error");
+
             const p = document.createElement('div');
             p.className = 'error-popup';
             p.style.left = Math.random() * 400 + 'px';
@@ -725,6 +1029,8 @@
                 createErrorPopup('Impossible d\'ouvrir, fichier chiffré par Rensenware :(');
                 return;
             }
+            playSound("good");
+
             createWindow(name, `<textarea class='notepad-text'>${content}</textarea>`, true, '/assets/xp/text.png');
         }
 
@@ -742,11 +1048,91 @@
 
         /* TOUHOU */
         function openTouhou() {
-            createWindow('Touhou 12', `<div class='touhou-screen' id='touhouScreen'>Loading...</div>`, false, '/assets/xp/touhou.png');
+            if (document.querySelector(".touhou-screen")) {
+                createErrorPopup('Touhou 12 est déjà lancé !!!!!!!!111!!!!!!!!!!!! >:(');
+                return;
+            }
+            createWindow('Touhou 12', `<div class='touhou-screen'>
+                <div class="loading-screen">
+                    <img src="./assets/xp/touhou/loading.png">
+                    <span class="loading-text">
+                        <img src="./assets/xp/touhou/loading_text.png" alt="">
+                    </span>
+                    <span class="loading-text-en">
+                        <img src="./assets/xp/touhou/loading_text_en.png" alt="">
+                    </span>
+                    <div class="particles"></div>
+                </div>
+
+               <div class="title-screen">
+            <img src="./assets/xp/touhou/space.png">
+            <span class="reimu">
+                <img src="./assets/xp/touhou/space_reimu.png" alt="">
+            </span>
+
+            <div class="menu">
+                <img class="menu-green" src="./assets/xp/touhou/menu-start-green.png" alt="">
+                <img class="menu-useless" src="./assets/xp/touhou/menu.png" alt="">
+            </div>
+
+            <div class="other-texts">
+                <img class="other-texts__version" src="./assets/xp/touhou/version.png" alt="">
+                <div class="other-texts__title">
+                    <img class="" src="./assets/xp/touhou/title.png" alt="">
+                </div>
+                <img class="other-texts__copystrike" src="./assets/xp/touhou/copystrike.png" alt="">
+            </div>
+
+
+            <div class="particles"></div>
+        </div>
+                
+                </div>`, false, '/assets/xp/touhou.png');
+
+            let touhouWindow = document.querySelector(".touhou-screen");
+            if (!touhouWindow) return;
+            let loadingScreen = touhouWindow.querySelector(".loading-screen");
+            if (!loadingScreen) return;
+            let titleScreen = touhouWindow.querySelector(".title-screen");
+            if (!loadingScreen) return;
+            loadingScreen.classList.add("active");
+
+            const particlesContainer = document.querySelector(".particles");
+            function createParticle() {
+                const p = document.createElement("div");
+                p.classList.add("particle");
+
+                p.style.left = (Math.random() * 100) + "%";
+                p.style.top = (Math.random() * 5) + "px";
+
+                particlesContainer.appendChild(p);
+
+                const duration = 4000 + Math.random() * 4000;
+                const start = Date.now();
+                const rotateSpeed = ((Math.random() > 0.5) ? 1 : -1) * (0.5 + Math.random() * 3);
+
+                function animate() {
+                    let t = (Date.now() - start) / duration;
+                    p.style.transform = `translateY(${t * 200}px) rotate(${t * rotateSpeed * 360}deg)`;
+                    const tt = 0.1;
+                    p.style.opacity = (t < tt) ? (t / tt) : (1 - (t - tt) * 1.5);
+
+                    if (t < 1) requestAnimationFrame(animate);
+                    else p.remove();
+                }
+                animate();
+            }
+
+            setInterval(createParticle, 200);
 
             setTimeout(() => {
-                touhouTitle();
-            }, 1500);
+                loadingScreen.classList.remove("active");
+            }, 5000);
+
+            setTimeout(() => {
+                titleScreen.classList.add("active");
+            }, 5000);
+
         }
 
         function touhouTitle() {
@@ -767,6 +1153,8 @@
             if (touhouScore >= 200000000) {
                 filesEncrypted = false;
                 alert('Fichiers restaurés');
+                playSound("tada");
+
             }
         }
 
@@ -781,11 +1169,7 @@
             desktop.appendChild(icon);
         }
 
-        createIcon(20, 20, 'image1.png', 'Image 1', () => openImage('image1.png'));
-        createIcon(20, 110, 'image2.png', 'Image 2', () => openImage('image2.png'));
-        createIcon(20, 200, 'image3.png', 'Image 3', () => openImage('image3.png'));
-        createIcon(20, 290, 'text.png', 'Note.txt', () => openText('Note.txt', 'it is good'));
-        createIcon(20, 380, 'virus.png', 'Rensenware', openRensenware);
+
 
     </script>
 
