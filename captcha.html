@@ -304,6 +304,14 @@
         grid.querySelectorAll('.cell').forEach(cell => {
             cell.addEventListener('click', () => {
                 cell.classList.toggle('selected');
+                const selected = grid.querySelectorAll('.cell.selected').length;
+
+                if (selected != 3 && result.style.display == 'block') {
+                    stopWinAnimation();
+                    result.style.display = 'none';
+
+
+                }
             });
         });
 
