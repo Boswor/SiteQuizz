@@ -206,6 +206,16 @@
             display: flex;
             gap: 1rem;
         }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100dvw;
+            height: 100dvh;
+            z-index: 15;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -307,15 +317,140 @@
             const selected = grid.querySelectorAll('.cell.selected').length;
             result.style.display = 'block';
             if (selected == 3) {
-                result.innerHTML = "✅ La mission a échoué avec succès !<br>Envoyer une capture d'écran via Mattermost pour valider votre réponse.";
+                winAnimation();
+                result.innerHTML = "✅ L'envoi a échoué avec succès !<br>Envoyer une capture d'écran via Mattermost pour valider votre réponse.";
             } else if (selected < 3) {
+                stopWinAnimation();
                 result.innerHTML = "❌ ERREUR !!!! Pas assez de cases sélectionnées :'(";
 
             } else if (selected > 3) {
+                stopWinAnimation();
                 result.innerHTML = "❌ ERREUR !!!! Trop de cases sélectionnées >:(";
 
             }
         });
+
+        var winAnimFrame = null;
+        var winAnimTimeout = null;
+        var winCanvas = null;
+
+        function winAnimation() {
+            winCanvas = document.createElement("canvas");
+            document.body.appendChild(winCanvas);
+            var ctx = winCanvas.getContext("2d");
+
+            winCanvas.width = window.innerWidth;
+            winCanvas.height = window.innerHeight;
+
+            var particles = [];
+
+            var gravity = 0.15;
+            var maxSpeed = 6;
+            var minSize = 8;
+            var maxSize = 30;
+            var minLife = 30;
+            var maxLife = 50;
+
+            var particleImg = new Image();
+            particleImg.src = "assets/ficsit.png";
+
+            function random(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            function createParticle(x, y) {
+                return {
+                    x: x,
+                    y: y,
+                    vx: random(-maxSpeed, maxSpeed),
+                    vy: random(-maxSpeed, maxSpeed),
+                    size: random(minSize, maxSize),
+                    opacity: 1,
+                    life: random(minLife, maxLife),
+                    friction: random(0.95, 0.99)
+                };
+            }
+
+            function updateParticles() {
+                for (var i = 0; i < particles.length; i++) {
+                    var p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += gravity;
+                    p.vx *= p.friction;
+                    p.vy *= p.friction;
+                    p.life--;
+
+                    if (p.life <= 0) p.opacity -= 0.1;
+
+                    if (p.life <= -10) {
+                        particles.splice(i, 1);
+                        i--;
+                    }
+                }
+            }
+
+            function drawParticles() {
+                if (!particleImg.complete) return;
+
+                for (var p of particles) {
+                    ctx.save();
+                    ctx.globalAlpha = p.opacity;
+                    ctx.drawImage(
+                        particleImg,
+                        p.x - p.size / 2,
+                        p.y - p.size / 2,
+                        p.size,
+                        p.size
+                    );
+                    ctx.restore();
+                }
+            }
+
+            function createFirework(x, y) {
+                var numParticles = Math.floor(random(30, 50));
+                for (var i = 0; i < numParticles; i++) {
+                    particles.push(createParticle(x, y));
+                }
+            }
+
+            function randomFirework() {
+                if (document.hasFocus()) {
+                    createFirework(
+                        random(0, winCanvas.width),
+                        random(0, winCanvas.height)
+                    );
+                }
+                setTimeout(randomFirework, Math.floor(random(100, 200)));
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, winCanvas.width, winCanvas.height);
+                updateParticles();
+                drawParticles();
+                winAnimFrame = requestAnimationFrame(animate);
+            }
+
+            animate();
+            winAnimTimeout = setTimeout(randomFirework, 50);
+
+            window.addEventListener("resize", () => {
+                winCanvas.width = window.innerWidth;
+                winCanvas.height = window.innerHeight;
+            });
+        }
+
+
+        // === STOP FUNCTION ===
+        function stopWinAnimation() {
+            if (winAnimFrame) cancelAnimationFrame(winAnimFrame);
+            if (winAnimTimeout) clearTimeout(winAnimTimeout);
+
+            if (winCanvas && winCanvas.parentNode) {
+                winCanvas.parentNode.removeChild(winCanvas);
+            }
+        }
+
     </script>
     <script>
         const easterEgg = new Konami(atob("aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1aS0JuR3V3eEZ2RQ=="));
