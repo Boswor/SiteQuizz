@@ -5,6 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>XP Desktop - Touhou 12</title>
+    <script src="https://unpkg.com/konami@1.7.0/konami.js"></script>
+    ba
     <style>
         * {
             box-sizing: border-box;
@@ -1088,6 +1090,13 @@
                 createIcon(20, 20, 'image1.png', 'Image 1', () => openImage('image1.png'));
                 createIcon(20, 110, 'image2.png', 'Image 2', () => openImage('image2.png'));
                 createIcon(20, 200, 'image3.png', 'Image 3', () => openImage('image3.png'));
+                createIcon(110, 20, 'image4.jpg', 'Image 4', () => openImage('image4.jpg'));
+                createIcon(110, 110, 'image5.jpg', 'Image 5', () => openImage('image5.jpg'));
+                createIcon(110, 200, 'image6.jpg', 'Image 6', () => openImage('image6.jpg'));
+
+                createIcon(470, 470, 'image7.jpg', 'Image 7', () => openImage('image7.jpg'));
+                createIcon(380, 110, 'image5.jpg', 'Image 8', () => openImage('image5.jpg'));
+
                 createIcon(20, 290, 'text.png', 'good document.txt', () => openText('good document.txt', 'it is good'));
                 createIcon(20, 380, 'virus.png', 'Rensenware', openRensenware);
             }, { once: true });
@@ -1407,12 +1416,11 @@
             if (!loadingScreen) return;
             loadingScreen.classList.add("active");
 
-            let redCover = document.querySelector(".red-cover");
-            if (redCover) {
+            document.querySelectorAll(".red-cover").forEach(redCover => {
                 setTimeout(() => {
                     redCover.classList.add("active");
                 }, 500);
-            }
+            });
 
 
             var particlesContainer = document.querySelector(".particles");
@@ -1585,6 +1593,10 @@
 
 
 
+    </script>
+
+    <script>
+        const easterEgg = new Konami(atob("aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj04MmtvcDJqdllfQQ=="));
     </script>
 
 </body>
