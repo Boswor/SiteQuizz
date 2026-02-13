@@ -383,6 +383,34 @@
             padding: 0;
         }
 
+        .red-cover {
+            display: none;
+            width: 6%;
+            height: 4%;
+            background-color: red;
+            position: absolute;
+            left: 70%;
+            bottom: 23%;
+        }
+
+        .red-cover::after {
+            content: '0';
+            width: 350%;
+            height: 100%;
+            background-color: red;
+            position: absolute;
+            left: -292%;
+            top: 114%;
+            font-family: Courier;
+            font-weight: bold;
+        }
+
+        .red-cover.active {
+            display: block;
+        }
+
+
+
         /* NOTEPAD */
         .notepad-text {
             width: 100%;
@@ -426,6 +454,18 @@
             position: relative;
             background: #000;
         }
+
+        /* comic-relief-regular - latin */
+        @font-face {
+            font-display: swap;
+            /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+            font-family: 'Comic Relief';
+            font-style: normal;
+            font-weight: 400;
+            src: url('./assets/fonts/comic.woff2') format('woff2');
+            /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+        }
+
 
         .touhou-screen .loading-screen {
             position: absolute;
@@ -645,6 +685,190 @@
             position: relative;
         }
 
+        .touhou-screen .title-screen.active2 .reimu {
+            transition-delay: 0s;
+            left: -100%;
+            opacity: 0;
+        }
+
+        .touhou-screen .title-screen.active2 .menu {
+            transition-delay: 0s;
+            opacity: 0;
+        }
+
+        .touhou-screen .title-screen.active2 .other-texts {
+            transition-delay: 0s;
+            opacity: 0;
+        }
+
+        .touhou-screen .title-screen .particles2 {
+            bottom: unset;
+            right: unset;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .touhou-screen .title-screen.active2 .particles2 {
+            bottom: unset;
+            opacity: 1;
+        }
+
+        .touhou-screen .title-screen .imgspace {
+            transition: filter 0.3s ease-in-out;
+            filter: brightness(1);
+
+        }
+
+        .touhou-screen .title-screen.active2 .imgspace {
+            filter: brightness(0.75www);
+        }
+
+        .touhou-screen .title-screen .corner {
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .touhou-screen .title-screen .corner:after {
+            content: '';
+            background-image: url(./assets/xp/touhou/lines2.png);
+            width: 200px;
+            height: 90px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            transform: rotate(180deg);
+        }
+
+        .touhou-screen .title-screen.active2 .corner {
+            opacity: 1;
+        }
+
+        .touhou-screen .title-screen .corner img {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1;
+            width: auto;
+            height: auto;
+        }
+
+        .touhou-screen .title-screen.active2:not(.active3) .corner .rank {
+            transform: translateX(15px);
+        }
+
+        .touhou-screen .title-screen.active3 .corner .player {
+            transform: translateX(15px);
+        }
+
+        .touhou-screen .title-screen .rank-select {
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            z-index: 1;
+            padding: 30px 10px;
+            background: linear-gradient(90deg, rgba(248, 184, 255, 0) 0%, rgba(254, 227, 255, 0.5) 30%, rgba(254, 227, 255, 0.5) 70%, rgba(248, 184, 255, 0) 100%);
+        }
+
+        .touhou-screen .title-screen.active2:not(.active3) .rank-select {
+            opacity: 1;
+        }
+
+        .touhou-screen .title-screen .player-select {
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            padding-top: 80px;
+        }
+
+        .touhou-screen .title-screen.active3 .player-select {
+            opacity: 1;
+        }
+
+        .touhou-screen .title-screen .player-select .choice {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 50px;
+        }
+
+        .touhou-screen .title-screen .player-select .choice .text {
+            font-family: 'Comic Relief';
+            font-size: 16px;
+            color: white;
+            -webkit-text-fill-color: white;
+            -webkit-text-stroke-width: 4px;
+            -webkit-text-stroke-color: #808000;
+            paint-order: stroke fill;
+            max-width: 220px;
+
+        }
+
+        .touhou-screen .title-screen .player-select .choice img {
+            position: absolute;
+            right: -250px;
+            top: 45%;
+            transform: translateY(-50%);
+            width: 200px;
+            height: 250px;
+            object-fit: contain;
+            opacity: 0;
+            transition: right 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        .touhou-screen .title-screen .player-select .choice.active img {
+            right: 30px;
+            opacity: 1;
+        }
+
+        .touhou-screen .title-screen .player-select .question {
+            transition: opacity 0.3s ease-in-out;
+            position: absolute;
+            top: 85%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            z-index: 1;
+            padding: 30px 10px;
+            font-family: 'Comic Relief';
+            color: blueviolet;
+            width: 300px;
+            font-size: 19px;
+            background: linear-gradient(90deg, rgba(248, 184, 255, 0) 0%, rgba(254, 227, 255, 0.5) 30%, rgba(254, 227, 255, 0.5) 70%, rgba(248, 184, 255, 0) 100%);
+        }
+
+        .touhou-screen .title-screen .player-select .choicecursor {
+            transition: top 0.5s ease, height 0.3s ease-in-out;
+            position: absolute;
+            top: 80px;
+            left: 0;
+            z-index: 0;
+            width: 290px;
+            height: 42px;
+            font-size: 19px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.75) 30%, rgba(255, 255, 255, 0.75) 70%, rgba(255, 255, 255, 0) 100%);
+        }
+
         /* ================= ERROR ================= */
         .error-popup {
             position: absolute;
@@ -760,6 +984,25 @@
             pointer-events: all;
             opacity: 1;
         }
+
+        .bsod {
+            cursor: none !important;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            -webkit-user-drag: none;
+            background-color: #000080;
+            color: #fff;
+            margin: 0;
+            padding: 24px 48px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 20px;
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            line-height: 3;
+        }
     </style>
 </head>
 
@@ -804,7 +1047,19 @@
             warning: new Audio("assets/xp/sounds/warning.wav"),
             good: new Audio("assets/xp/sounds/good.mp3"),
             tada: new Audio("assets/xp/sounds/tada.wav"),
+            menu: new Audio("assets/xp/touhou/sounds/touhou-menu.mp3"),
+            ok: new Audio("assets/xp/touhou/sounds/ok.wav"),
+            invalid: new Audio("assets/xp/touhou/sounds/invalid.wav"),
+            select: new Audio("assets/xp/touhou/sounds/select.wav"),
+            death: new Audio("assets/xp/touhou/sounds/death.wav"),
+
         };
+
+        sounds.menu.volume = 0.2;
+        sounds.invalid.volume = 0.2;
+        sounds.select.volume = 0.2;
+        sounds.ok.volume = 0.2;
+        sounds.death.volume = 0.2;
 
         let zIndex = 20;
         let filesEncrypted = false;
@@ -826,6 +1081,7 @@
 
                 /* CLOCK */
                 setInterval(() => {
+                    if (!document.getElementById('clock')) return;
                     document.getElementById('clock').innerText = new Date().toLocaleTimeString();
                 }, 1000);
 
@@ -888,7 +1144,7 @@
 
             win.innerHTML = `
 <div class='titlebar'>
-              <span>${title + (isRensenware ? " ⁽ˢᶦ ˢᶦ ᶜᵃ ᵉˣᶦˢᵗᵉ ᵖᵒᵘʳ ᵈᵉ ᵛʳᵃᶦ⁾" : "")}</span>
+              <span>${title + (isRensenware ? " ⁽ᵒᵘᶦ ᶜᵃ ᵉˣᶦˢᵗᵉ ᵖᵒᵘʳ ᵈᵉ ᵛʳᵃᶦ⁾" : "")}</span>
 <div class='win-buttons'>
 <div class='win-btn min'>_</div>
 <div class='win-btn max'>□</div>
@@ -1038,7 +1294,7 @@
         function openRensenware() {
             startEncryption();
             createIcon(20, 470, 'touhou.png', 'Touhou 12', openTouhou);
-            createWindow('Rensenware', `<img class="rensenware" src='/assets/xp/rensenware.png' style='max-width:100%'>`, false, '/assets/xp/virus.png');
+            createWindow('Rensenware', `<img class="rensenware" src='/assets/xp/rensenware.png' style='max-width:100%'><div class="red-cover"></div>`, false, '/assets/xp/virus.png');
         }
         function startEncryption() {
             filesEncrypted = true;
@@ -1065,7 +1321,7 @@
                 </div>
 
                <div class="title-screen">
-            <img src="./assets/xp/touhou/space.png">
+            <img class="imgspace" src="./assets/xp/touhou/space.png">
             <span class="reimu">
                 <img src="./assets/xp/touhou/space_reimu.png" alt="">
             </span>
@@ -1084,7 +1340,61 @@
             </div>
 
 
-            <div class="particles"></div>
+            <div class="particles2"></div>
+
+            <div class="corner">
+                <img class="rank" src="./assets/xp/touhou/rank.png" alt="">
+                <img class="player" src="./assets/xp/touhou/player.png" alt="">
+            </div>
+
+            <div class="rank-select">
+                <img src="./assets/xp/touhou/lunatic.png" alt="">
+            </div>
+
+            <div class="player-select">
+                <div class="choice choice1 active">
+                    <div class="text">
+                        Messagerie instantanée
+                    </div>
+                    <img src="./assets/xp/touhou/coronel_wassap.png" alt="">
+                </div>
+
+                <div class="choice choice2">
+                    <div class="text">
+                        E-mails
+                    </div>
+                    <img src="./assets/xp/touhou/mail.gif" alt="">
+                </div>
+
+                <div class="choice choice3">
+                    <div class="text">
+                        Face à face
+                    </div>
+                    <img src="./assets/xp/touhou/stare.png" alt="">
+                </div>
+
+                <div class="choice choice4">
+                    <div class="text">
+                        Lettres manuscrites
+                    </div>
+                    <img src="./assets/xp/touhou/letter.png" alt="">
+                </div>
+
+                <div class="choice choice5">
+                    <div class="text">
+                        Je croyais avoir dit que je n'avais pas d'amis à la question 13 :(
+                    </div>
+                    <img src="./assets/xp/touhou/sad.png" alt="">
+                </div>
+
+                <div class="choicecursor">
+                </div>
+
+                <div class="question">
+                    Quelle est la meilleure forme de communication avec vos amis dans la plupart des situations ?
+                </div>
+            </div>
+
         </div>
                 
                 </div>`, false, '/assets/xp/touhou.png');
@@ -1097,8 +1407,19 @@
             if (!loadingScreen) return;
             loadingScreen.classList.add("active");
 
-            const particlesContainer = document.querySelector(".particles");
+            let redCover = document.querySelector(".red-cover");
+            if (redCover) {
+                setTimeout(() => {
+                    redCover.classList.add("active");
+                }, 500);
+            }
+
+
+            var particlesContainer = document.querySelector(".particles");
+            var basespeed = 200;
+            var baseduration = 4000;
             function createParticle() {
+                if (document.querySelector(".bsod")) return;
                 const p = document.createElement("div");
                 p.classList.add("particle");
 
@@ -1107,13 +1428,13 @@
 
                 particlesContainer.appendChild(p);
 
-                const duration = 4000 + Math.random() * 4000;
+                const duration = baseduration + Math.random() * 4000;
                 const start = Date.now();
                 const rotateSpeed = ((Math.random() > 0.5) ? 1 : -1) * (0.5 + Math.random() * 3);
 
                 function animate() {
                     let t = (Date.now() - start) / duration;
-                    p.style.transform = `translateY(${t * 200}px) rotate(${t * rotateSpeed * 360}deg)`;
+                    p.style.transform = `translateY(${t * basespeed}px) rotate(${t * rotateSpeed * 360}deg)`;
                     const tt = 0.1;
                     p.style.opacity = (t < tt) ? (t / tt) : (1 - (t - tt) * 1.5);
 
@@ -1127,36 +1448,129 @@
 
             setTimeout(() => {
                 loadingScreen.classList.remove("active");
-            }, 5000);
+                playSound("menu");
+
+            }, 4000);
 
             setTimeout(() => {
                 titleScreen.classList.add("active");
-            }, 5000);
 
-        }
+                setTimeout(() => {
+                    keyzzz();
+                }, 2500);
+            }, 4000);
 
-        function touhouTitle() {
-            touhouScreen.innerHTML = `<h1>Touhou 12</h1><p>Press any key</p>`;
-            window.onkeydown = () => touhouSelect();
-        }
+            var step = 0;
+            var choiceIndex = 1;
+            var transitionning = false;
 
-        function touhouSelect() {
-            touhouScreen.innerHTML = `
-                    <h2>Select Character</h2>
-                    <div class='character' onclick='startGame()'>Reimu</div>
-    <div class='character' onclick='startGame()'>Marisa</div>`;
-        }
+            function keyzzz() {
+                window.addEventListener('keydown', (event) => {
+                    if (transitionning) return;
 
-        function startGame() {
-            touhouScore += Math.floor(Math.random() * 50000000);
-            alert('Score: ' + touhouScore);
-            if (touhouScore >= 200000000) {
-                filesEncrypted = false;
-                alert('Fichiers restaurés');
-                playSound("tada");
+                    switch (event.key) {
+                        case "ArrowUp":
+                        case "ArrowDown":
+                            if (step < 2) {
+                                playSound("invalid");
+                            } else {
+                                playSound("select");
+                                if (event.key == "ArrowUp") {
+                                    choiceIndex -= 1;
+                                    if (choiceIndex < 1) choiceIndex = 5;
+                                } else {
+                                    choiceIndex += 1;
+                                    if (choiceIndex > 5) choiceIndex = 1;
+                                }
+                                document.querySelectorAll(".choice").forEach(c => {
+                                    c.classList.remove("active");
+                                });
+                                let choice = document.querySelector(".choice" + choiceIndex);
+                                if (choice) choice.classList.add("active")
 
+                                let cursor = document.querySelector(".choicecursor");
+                                if (cursor) {
+                                    cursor.style.top = "" + (80 + (choiceIndex - 1) * 42) + "px";
+                                    cursor.style.height = (choiceIndex == 5 ? "86px" : "42px");
+                                }
+                            }
+                            break;
+                    }
+
+                    switch (event.code) {
+                        case "KeyX":
+                            playSound("invalid");
+                            break;
+                        case "KeyW":
+                        case "KeyZ":
+                            playSound("ok");
+                            step++;
+                            if (step == 1) {
+                                titleScreen.classList.add("active2");
+                                basespeed = 750;
+                                baseduration = 6000;
+                                particlesContainer = document.querySelector('.particles2')
+                            } else if (step == 2) {
+                                titleScreen.classList.add("active3");
+
+                            } else if (step >= 3) {
+                                bluescreenofdeath();
+
+                            }
+                            transitionning = true;
+                            setTimeout(() => {
+                                transitionning = false;
+                            }, 500);
+                            break;
+                    }
+                });
+            }
+
+            function bluescreenofdeath() {
+                playSound("death");
+                sounds.menu.pause();
+                sounds.menu.currentTime = 0;
+
+                document.body.querySelectorAll("div").forEach(div => {
+                    div.remove();
+                });
+
+                let emoji = "💀";
+                switch (choiceIndex) {
+                    case 1:
+                        emoji = "㊗️";
+                        break;
+                    case 2:
+                        emoji = "🕳️";
+                        break;
+                    case 3:
+                        emoji = "🤨";
+                        break;
+                    case 4:
+                        emoji = "🧛";
+                        break;
+                    case 5:
+                        emoji = "🧻";
+                        break;
+                }
+                const bsod = document.createElement('div');
+                bsod.className = 'bsod';
+                bsod.innerHTML = `
+                <div id="terminal" tabindex="0"></div>
+                <p>A problem has been detected and Windows has been shut down to prevent damage to your computer.</p>
+                <p>The problem seems to be caused by the following file: Seau.sys</p>
+                <p>FEUR_FILE_SYSTEM</p>
+                <p>If this is the first time you've seen this stop error screen, <strong>send ${emoji} to you-know-who</strong>. If this screen appears again, follow these steps:</p>
+                <p>Check to make sure any new hardware or software is properly installed.<br />If this is a new installation, ask your hardware or software manufacturer for any Windows updates you might need.</p>
+                <p>If problems continue, disable or remove any newly installed hardware or software. Disable BIOS memory options such as caching or shadowing.<br />If you need to use safe mode to remove or disable components, restart your computer, press F8 to select Advanced Startup Options, and then select Safe Mode.</p>
+                <p>Technical Information:</p>
+                <p>*** STOP: 0x00000024 (0x0000001904fb, 0xffffff8800007d27b28, 0xfffff880007d27380, 0xfffffff800002e9c710</p>
+                <p>*** Seau.sys - Address 0xffffff880000141ea88 base at 0xfffffff880001419000 DateStamp 0x4d79997b</p>
+                `;
+                document.body.appendChild(bsod);
             }
         }
+
 
         /* ================= DESKTOP ICONS ================= */
         function createIcon(x, y, img, label, action) {
