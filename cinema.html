@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Cinema</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/konami@1.7.0/konami.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            background: black;
+            overflow: hidden;
+            font-family: sans-serif;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url(./assets/missing-texture.png);
+            background-size: 192px 192px;
+            background-repeat: repeat;
+            filter: brightness(0.25);
+            background-repeat: repeat;
+            animation: moveBg 5s linear infinite;
+        }
+
+        @keyframes moveBg {
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 576px -576px;
+            }
+        }
+
+        .scene {
+            width: 100vw;
+            height: auto;
+            perspective: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transform: scale(1.3) translateY(-165px);
+        }
+
+        .camera {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.05s linear;
+        }
+
+        .camera-bis {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .cinema {
+            position: relative;
+            width: 100vw;
+            height: auto;
+            pointer-events: none;
+            display: block;
+
+        }
+
+        .screen-video {
+            position: absolute;
+
+            left: 50%;
+            top: 27%;
+            transform: translateX(-50%);
+
+            width: 46%;
+            aspect-ratio: 555 / 332;
+
+            object-fit: cover;
+            z-index: -2;
+
+            cursor: pointer;
+
+        }
+
+        .play-btn {
+            position: absolute;
+            width: 150ox;
+            height: auto;
+            z-index: -1;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 38%;
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.2s ease;
+
+        }
+
+        .play-btn.inactive {
+            opacity: 0;
+        }
+
+
+        .movie-poster {
+            width: auto;
+            height: 300px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-style: preserve-3d;
+            animation: spin3d 2s linear infinite;
+            z-index: 10;
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+            box-shadow: 0px -1px 11px 21px rgba(255, 0, 0, 1);
+
+        }
+
+        @keyframes spin3d {
+            from {
+                transform: rotateY(0deg);
+            }
+
+            to {
+                transform: rotateY(360deg);
+            }
+        }
+
+        .movie-poster:before,
+        .movie-poster:after {
+            content: '';
+            position: absolute;
+            display: block;
+            backface-visibility: hidden;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .movie-poster:after {
+            transform: rotateY(180deg) scaleX(-1);
+        }
+
+        .movie-poster--silly {
+            top: 48%;
+            left: 50%;
+            aspect-ratio: 488 / 721;
+
+        }
+
+        .movie-poster--silly::before,
+        .movie-poster--silly::after {
+            background-image: url(assets/movie-silly.png);
+
+        }
+
+        .movie-poster--angy {
+            top: 25%;
+            left: 75%;
+            aspect-ratio: 768 / 1072;
+        }
+
+        .movie-poster--angy::before,
+        .movie-poster--angy::after {
+            background-image: url(assets/movie-angy.png);
+
+        }
+
+        .movie-poster--sad {
+            top: 25%;
+            left: 25%;
+            aspect-ratio: 848 / 1200;
+        }
+
+        .movie-poster--sad::before,
+        .movie-poster--sad::after {
+            background-image: url(assets/movie-sad.png);
+
+        }
+
+        .movie-poster--wat {
+            top: 0%;
+            left: 99%;
+            aspect-ratio: 488 / 721;
+
+        }
+
+        .movie-poster--wat::before,
+        .movie-poster--wat::after {
+            background-image: url(assets/movie-huh.png);
+
+        }
+
+        .movie-poster--alpha {
+            top: 25%;
+            left: 50%;
+            aspect-ratio: 710 / 1125;
+        }
+
+        .movie-poster--alpha::before,
+        .movie-poster--alpha::after {
+            background-image: url(assets/movie-alpha.jpg);
+
+        }
+
+        body.silly .movie-poster--silly,
+        body.angy .movie-poster--angy,
+        body.sad .movie-poster--sad,
+        body.wat .movie-poster--wat,
+        body.alpha .movie-poster--alpha {
+            opacity: 1;
+            pointer-events: all;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scene">
+
+        <div class="camera-bis">
+            <a class="movie-poster movie-poster--silly" href="https://www.youtube.com/watch?v=OYf6n-tlLC0&t=967s"
+                target="_blank"></a>
+            <a class="movie-poster movie-poster--angy" href="https://www.youtube.com/watch?v=1IJzISmAiAc&t=155s"
+                target="_blank"></a>
+            <a class="movie-poster movie-poster--sad" href="https://www.youtube.com/watch?v=xpwalmbiXog"
+                target="_blank"></a>
+            <a class="movie-poster movie-poster--wat" href="https://www.youtube.com/watch?v=SmEuESMWbn4"
+                target="_blank"></a>
+            <a class="movie-poster movie-poster--alpha" href="https://www.youtube.com/watch?v=a_EdAEjWpEo"
+                target="_blank"></a>
+        </div>
+
+
+        <div class="camera" id="camera">
+            <video class="screen-video" src="/assets/movie.mp4" loop playsinline></video>
+            <img class="play-btn" src="/assets/yt.png" alt="">
+            <img class="cinema" src="/assets/theater.png" />
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const camera = document.getElementById("camera");
+
+            const cameraBis = document.querySelector(".camera-bis");
+
+            const maxYaw = 20;
+            const maxPitch = 10;
+
+            document.addEventListener("mousemove", e => {
+
+                const x = (e.clientX / window.innerWidth - 0.5) * 0.75;
+                const y = (e.clientY / window.innerHeight - 0.5) * 3;
+
+                const yaw = x * maxYaw;
+                const pitch = -y * maxPitch;
+
+                camera.style.transform =
+                    `rotateX(${pitch}deg) rotateY(${yaw}deg)`;
+                cameraBis.style.transform = camera.style.transform;
+
+            });
+
+            let playBtn = document.querySelector(".play-btn");
+            let video = document.querySelector("video");
+            if (!video || !playBtn) return;
+
+            video.volume = 0.1;
+
+            video.addEventListener("click", () => {
+                playBtn.classList.toggle("inactive");
+                if (playBtn.classList.contains("inactive")) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+
+
+                video.ontimeupdate = function () {
+                    getPercentage()
+                };
+
+                function getPercentage() {
+                    totalLength = video.duration % 60;
+                    percentageCompleted = (video.currentTime / totalLength) * 100;
+                    let isSilly = video.currentTime >= 2.45 && video.currentTime < 4.71;
+                    let isAngy = video.currentTime >= 4.72 && video.currentTime < 7.05;
+                    let isSad = video.currentTime >= 7.06 && video.currentTime < 9.54;
+                    let isQuestionMark = video.currentTime >= 9.55 && video.currentTime < 13.50;
+                    let isAlpha = video.currentTime >= 13.50;
+                    document.body.classList.toggle("silly", isSilly);
+                    document.body.classList.toggle("angy", isAngy);
+                    document.body.classList.toggle("sad", isSad);
+                    document.body.classList.toggle("wat", isQuestionMark);
+                    document.body.classList.toggle("alpha", isAlpha);
+
+                }
+            });
+        });
+
+
+
+    </script>
+    <script>
+        const easterEgg = new Konami(atob("aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj0yWEM0cUwtRGZRZw=="))
+    </script>
+
+</body>
+
+</html>
