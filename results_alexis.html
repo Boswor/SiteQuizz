@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Résultats !!!!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="progressbar.css">
+    <script src="https://unpkg.com/konami@1.7.0/konami.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        /* comic-relief-regular - latin */
+        @font-face {
+            font-display: swap;
+            /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+            font-family: 'Comic Relief';
+            font-style: normal;
+            font-weight: 400;
+            src: url('./assets/fonts/comic.woff2') format('woff2');
+            /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+        }
+
+
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            background-image: url("./assets/results/bg.png");
+            background-repeat: repeat;
+            background-size: 256px;
+            /* ou une taille précise */
+            animation: moveBg 5s linear infinite;
+            background-color: #eee;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body:after {
+            content: 'cliquez svp';
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            background: black;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 999;
+        }
+
+        body.nothing:after {
+            pointer-events: all;
+            opacity: 1;
+        }
+
+        .credits {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            color: #000;
+        }
+
+
+        @keyframes moveBg {
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 768px -768px;
+            }
+        }
+
+        canvas {
+            display: block;
+            transition: opacity 1s ease-in-out;
+            opacity: 0;
+            order: -1;
+        }
+
+        canvas.active {
+            opacity: 1;
+        }
+
+        .trivia {
+            padding: 40px;
+            background: #222;
+            z-index: 1;
+            position: relative;
+            color: #fff;
+            font-family: 'Comic Relief';
+            font-size: 1.8rem;
+        }
+
+        .trivia .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        h2 {
+            font-size: 3rem;
+            display: flex;
+            align-items: center;
+            grid-area: 10px;
+        }
+
+        h2::before,
+        h2::after {
+            content: '';
+            background-image: url("./assets/results/rin.gif");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 90px;
+            height: 90px;
+        }
+
+        h2::after {
+            transform: scaleX(-1);
+        }
+
+        h1 {
+            color: #fff;
+            font-family: 'Comic Relief';
+            font-size: 8rem;
+            position: absolute;
+            text-align: center;
+            padding: 3rem;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            -webkit-text-fill-color: white;
+            -webkit-text-stroke-width: 0.75rem;
+            -webkit-text-stroke-color: #03b9f2;
+            paint-order: stroke fill;
+        }
+
+        .flex {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+    </style>
+
+    <script type="importmap">
+    {
+        "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.161/build/three.module.js"
+        }
+    }
+    </script>
+</head>
+
+<body class="nothing">
+    <a href="https://sketchfab.com/3d-models/project-cirno-fumo-3d-scan-efd2a7f4dbf048c1a18438db7f86c4b9"
+        target="_blank" class="credits">Scan 3D par Renafox</a>
+
+
+    <h1 class="title">
+        BRAVO, TU ES CIRNO
+    </h1>
+
+    <div class="trivia">
+        Surnommée affectueusement (et surtout autoproclamée) « The Strongest », Cirno est une fée des glaces au
+        caractère bien
+        trempé qui est en réalité bien plus faible que les autres habitants notables de Gensokyo. Elle est naïve et
+        enfantine, au point que certains pourraient tout simplement la traiter d’idiote. Malgré cela (ou peut-être
+        justement grâce à cela), Cirno semble être populaire, même si l’attention qu’on lui porte consiste surtout à la
+        taquiner. Un de ses passe-temps favori est de geler les grenouilles avant de les faire revivre avec plus ou
+        moins de succès, ce qui lui a valu un avertissement de Reimu car Suwako pourrait s'énerver en conséquence si
+        elle l'apprenait.
+
+        <div class="gallery">
+            <img class="gif" src="assets/results/cirnoboom.gif">
+            <img class="gif" src="assets/results/cirnodance.gif">
+            <img class="gif" src="assets/results/cirnosaul.gif">
+        </div>
+
+    </div>
+
+    <div class="container" id="progressContainer">
+        <h2>
+            Question bonus
+        </h2>
+        <br>
+        <div class="flex">
+            <img src="/assets/results/bonus_alexis.png" alt="">
+            <img src="/assets/results/cloonpiss.png" alt="">
+
+        </div>
+        <br>
+        <p>Les couleurs et la référence à l'Amérique 🤠 🇺🇸 🦅 font bien évidemment penser à Clownpiece, également une
+            fée et
+            ayant une légère rivalité avec Cirno sur le titre de la « plus forte ». TOU TÉ LIÉ !!!</p>
+    </div>
+
+    <div class="container" id="progressContainer">
+        <h2>
+            Top 5 des résultats !!!1!
+        </h2>
+        <br>
+        <div class="progress-bar" data-total="99">
+            <div class="label">Cirno</div>
+            <div class="bar">
+                <div class="segment tooltip" data-value="83" data-tooltip="Questionnaire de base"
+                    style="background:#03b9f2">
+                </div>
+                <div class="segment tooltip" data-value="5" data-tooltip="Question LOL" style="background:#61d8fd">
+                </div>
+                <div class="segment tooltip" data-value="1" data-tooltip="Question Bonus" style="background:#90e4fe">
+                </div>
+                <div class="segment tooltip" data-value="10" data-tooltip="Bonus de réponses troll"
+                    style="background:#c0effe">
+                </div>
+            </div>
+            <div class="percent">0%</div>
+        </div>
+
+
+        <div class="progress-bar" data-total="89">
+            <div class="label">Reimu Hakurei</div>
+            <div class="bar">
+                <div class="segment tooltip" data-value="84" data-tooltip="Questionnaire de base"
+                    style="background:#fd4372">
+                </div>
+                <div class="segment tooltip" data-value="5" data-tooltip="Question Pokémon" style="background:#fe7b9c">
+                </div>
+            </div>
+            <div class="percent">0%</div>
+        </div>
+
+        <div class="progress-bar" data-total="88">
+            <div class="label">Aya Shameimaru</div>
+            <div class="bar">
+                <div class="segment tooltip" data-value="88" data-tooltip="Questionnaire de base"
+                    style="background:#dd7d0f">
+                </div>
+            </div>
+            <div class="percent">0%</div>
+        </div>
+
+        <div class="progress-bar" data-total="84">
+            <div class="label">Sakuya Izayoi</div>
+            <div class="bar">
+                <div class="segment tooltip" data-value="84" data-tooltip="Questionnaire de base"
+                    style="background:#6c6ad1">
+                </div>
+            </div>
+            <div class="percent">0%</div>
+        </div>
+
+        <div class="progress-bar" data-total="81">
+            <div class="label">Youmu Konpaku</div>
+            <div class="bar">
+                <div class="segment tooltip" data-value="81" data-tooltip="Questionnaire de base"
+                    style="background:#619864">
+                </div>
+            </div>
+            <div class="percent">0%</div>
+        </div>
+    </div>
+
+    <script>
+        window.onbeforeunload = function () {
+            window.scrollTo(0, 0);
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+        import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.161/examples/jsm/loaders/GLTFLoader.js";
+        import { DRACOLoader } from "https://cdn.jsdelivr.net/npm/three@0.161/examples/jsm/loaders/DRACOLoader.js";
+        import * as CANNON from "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js";
+
+        const sounds = {
+            zic: new Audio("assets/results/cirno.mp3"),
+        };
+
+        sounds.zic.volume = 0.3;
+        sounds.zic.loop = true;
+
+        function playSound(name) {
+            const s = sounds[name];
+            if (!s) return;
+            s.currentTime = 0;
+            s.play();
+        }
+
+        window.addEventListener("click", (e) => {
+            if (document.body.classList.contains("nothing")) {
+                document.body.classList.remove("nothing");
+                playSound("zic");
+
+
+                const scene = new THREE.Scene();
+
+                const camera = new THREE.PerspectiveCamera(
+                    60,
+                    window.innerWidth / window.innerHeight,
+                    0.1,
+                    100
+                );
+                camera.position.set(0, 1, 3);
+
+                const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.physicallyCorrectLights = true;
+
+                renderer.outputColorSpace = THREE.SRGBColorSpace;
+                renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                renderer.toneMappingExposure = 1.2;
+
+                document.body.appendChild(renderer.domElement);
+
+                const loader = new GLTFLoader();
+
+                var framecount = 0;
+
+                loader.load('./assets/3d/cirno.glb', function (gltf) {
+
+                    const model = gltf.scene;
+
+                    const wrapper = new THREE.Group();
+                    wrapper.add(model);
+                    scene.add(wrapper);
+
+                    var modelCopy = wrapper.clone(true);
+
+                    const box = new THREE.Box3().setFromObject(model);
+                    const center = box.getCenter(new THREE.Vector3());
+                    const size = box.getSize(new THREE.Vector3());
+
+                    model.position.x -= center.x;
+                    model.position.z -= center.z;
+                    model.position.y -= box.min.y;
+                    wrapper.rotation.y = Math.PI + (Math.PI) / 4;
+
+                    const distance = size.length() * 0.8;
+                    camera.position.set(0, size.y * 0.5, distance);
+
+
+                    const world = new CANNON.World();
+                    world.gravity.set(0, -30, 0);
+                    const applePhysMat = new CANNON.Material("apple");
+                    const groundPhysMat = new CANNON.Material("ground");
+                    const contactMat = new CANNON.ContactMaterial(applePhysMat, groundPhysMat, { friction: 0.2, restitution: 0.85 });
+                    world.addContactMaterial(contactMat);
+                    const groundBody = new CANNON.Body({ mass: 0, material: groundPhysMat });
+                    const groundShape = new CANNON.Plane();
+                    groundBody.addShape(groundShape);
+                    groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
+                    world.addBody(groundBody);
+                    const groundMesh = new THREE.Mesh(new THREE.PlaneGeometry(300, 100), new THREE.MeshStandardMaterial({ color: 0x000000, transparent: true, opacity: 0 }));
+                    groundMesh.position.y = -12;
+                    groundMesh.rotation.x = -Math.PI / 2;
+                    scene.add(groundMesh);
+
+                    renderer.domElement.classList.add("active");
+
+                    // ===== Cirnos =====
+                    const apples = [];
+                    function createApple() {
+                        if (!modelCopy || framecount < 800) return;
+
+                        const mesh = modelCopy.clone(true);
+                        const scale = 0.05 + Math.random() * 0.1;
+                        mesh.scale.setScalar(scale);
+                        mesh.position.set((Math.random() - 0.5) * 80, 40 + (Math.random() - 0.5) * 3, 15);
+                        scene.add(mesh);
+                        const radius = 0.35 * scale;
+                        const shape = new CANNON.Sphere(radius);
+                        const body = new CANNON.Body({ mass: 1, shape, material: applePhysMat, position: new CANNON.Vec3(mesh.position.x, mesh.position.y, mesh.position.z), angularDamping: 0.2 });
+                        body.angularVelocity.set((Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 50);
+                        world.addBody(body);
+                        apples.push({ mesh, body });
+                    }
+
+                    const clock = new THREE.Clock();
+
+                    setInterval(() => { if (apples.length < 300) createApple(); }, 50);
+
+
+                    function getSquash(time) {
+
+                        const speed = 4.0;
+                        const intensity = 0.4;
+
+                        const wave = Math.sin(time * speed);
+
+                        const peak = 1 - Math.abs(wave);
+                        return 1 - peak * intensity;
+                    }
+
+                    function animate(time = 0) {
+                        requestAnimationFrame(animate);
+                        framecount++;
+
+                        const t = time * 0.002;
+
+                        wrapper.rotation.y -= 0.01;
+
+                        wrapper.scale.y = wrapper.scale.y = getSquash(t);
+
+                        const dt = Math.min(clock.getDelta(), 0.033);
+                        world.step(1 / 60, dt, 3);
+                        for (const a of apples) {
+                            a.mesh.position.copy(a.body.position);
+                            a.mesh.quaternion.copy(a.body.quaternion);
+                        }
+                        renderer.render(scene, camera);
+                    }
+
+                    animate();
+
+                });
+
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                    composer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+        });
+
+    </script>
+
+    <script>
+        const container = document.getElementById('progressContainer');
+        let animated = false;
+
+        function isFullyVisible(el) {
+            const rect = el.getBoundingClientRect();
+            return (
+                rect.top >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+            );
+        }
+
+        function animateBars() {
+            if (animated) return;
+
+            console.log(isFullyVisible(container));
+
+            if (isFullyVisible(container)) {
+                animated = true;
+
+                document.querySelectorAll('.progress-bar').forEach(bar => {
+                    const total = parseInt(bar.dataset.total);
+                    const segments = bar.querySelectorAll('.segment');
+                    const percentText = bar.querySelector('.percent');
+
+                    let current = 0;
+                    let target = total;
+
+                    segments.forEach(seg => {
+                        const value = parseInt(seg.dataset.value);
+                        seg.style.width = value + '%';
+                    });
+
+                    let counter = 0;
+                    const interval = setInterval(() => {
+                        if (counter >= target) {
+                            clearInterval(interval);
+                        } else {
+                            counter++;
+                            percentText.textContent = counter + '%';
+                        }
+                    }, 20);
+                });
+            }
+        }
+
+        window.addEventListener('scroll', animateBars);
+    </script>
+
+    <script>
+        const easterEgg = new Konami(atob("aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj02bjNwRkZQU2xXNA=="))
+    </script>
+
+</body>
+
+</html>

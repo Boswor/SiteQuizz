@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Résultats !!!!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="progressbar.css">
+  <script src="https://unpkg.com/konami@1.7.0/konami.js"></script>
+
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    /* comic-relief-regular - latin */
+    @font-face {
+      font-display: swap;
+      /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+      font-family: 'Comic Relief';
+      font-style: normal;
+      font-weight: 400;
+      src: url('./assets/fonts/comic.woff2') format('woff2');
+      /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+    }
+
+    body {
+      margin: 0;
+      background-color: #333;
+      max-height: 100vh;
+      overflow: hidden;
+    }
+
+    body.js-zic {
+      max-height: unset;
+      overflow: auto;
+    }
+
+    .credits {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: #000;
+      z-index: 1;
+      color: #aaa;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      transition-delay: 2s;
+      pointer-events: none;
+    }
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #playButton {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      z-index: 10;
+      width: 180px;
+      height: 60px;
+      border-radius: 10px;
+      background-image: url(./assets/results/strudel.png);
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #171717;
+      cursor: pointer;
+    }
+
+    strudel-editor+div {
+      max-height: 100vh;
+      overflow-y: auto;
+    }
+
+    .reimu-container {
+      position: fixed;
+      z-index: 10;
+      bottom: 0;
+      right: 0;
+      width: 375px;
+      height: 375px;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      transition-delay: 2s;
+    }
+
+    .reimu-container:after {
+      content: '#turboFlemmeDeDétourer';
+      color: #111;
+      padding: 5px;
+      bottom: 0;
+      left: 0;
+      position: absolute;
+    }
+
+
+    body.js-zic .reimu-container {
+      opacity: 1;
+    }
+
+    body.js-zic h1 {
+      opacity: 1;
+    }
+
+    body.js-zic .credits {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .reimu {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .container {
+      padding-right: 415px;
+    }
+
+    .trivia {
+      padding: 40px;
+      background: #222;
+      z-index: 1;
+      position: relative;
+      color: #fff;
+      font-family: 'Comic Relief';
+      font-size: 1.8rem;
+      padding-right: 415px;
+    }
+
+    h2 {
+      font-size: 3rem;
+      display: flex;
+      align-items: center;
+      grid-area: 10px;
+    }
+
+    h2::before,
+    h2::after {
+      content: '';
+      background-image: url("./assets/results/rin.gif");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      width: 90px;
+      height: 90px;
+    }
+
+    h2::after {
+      transform: scaleX(-1);
+    }
+
+    h1 {
+      color: #fff;
+      font-family: 'Comic Relief';
+      font-size: 8rem;
+      position: absolute;
+      text-align: center;
+      padding: 3rem;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      -webkit-text-fill-color: white;
+      -webkit-text-stroke-width: 0.75rem;
+      -webkit-text-stroke-color: #fd4372;
+      paint-order: stroke fill;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      transition-delay: 2s;
+      pointer-events: none;
+
+    }
+  </style>
+
+  <script src="https://unpkg.com/@strudel/repl@latest"></script>
+</head>
+
+<body class="nothing">
+  <a href="https://github.com/AyHa1810/touhou-midi-collection/blob/main/3%20-%20Fighting%20Games/12.3%20-%20Hisoutensoku/15.%20Dichromatic%20Lotus%20Butterfly%20~%20Ancients%20(Shirai%20Yuki).mid"
+    target="_blank" class="credits">MIDI par Shirai Yuki</a>
+
+  <strudel-editor id="repl">
+    <!--
+setcpm(200/4)
+
+$: note(`<
+    - [c2 c2 - - d#2 d#2 - f2]
+    [- f2 - g2 - g2 f2 g2] [c3 a#2 - g2 - f#2 - f2]
+    [- d#2 - c2 a#1 - b1 -] [c2 c2 - - d#2 d#2 - f2]
+    [- f2 - g2 - g2 f2 g2] [c2 c2 - - d#2 d#2 - f2]
+    [- f2 - g2 - f2 g2 a#1] [g#1 g#1 - - c2 c2 - d2]
+    [- d#2 - f2 - f2 f2 f#2] [g2 g2 - a#2 - a#2 - b2]
+    [- b2 - g2 - g1 a#1 b1] [c2 c2 - - d#2 d#2 - f2]
+    [- f2 - g2 - g2 f2 g2] [c2 c2 - - d#2 d#2 - f2]
+    [- f2 - g2 - f2 g2 a#1] [g#1 g#1 - - c2 c2 - d2]
+    [- d#2 - f2 - f2 f2 f#2] [g2 g2 - a#2 - a#2 - b2]
+    [- b2 - g2 - g1 a#1 b1] [c2 - c2 a#1 - a#1 - g#1]
+    [- g#1 - g#1 g1 - g1 -] [c2 - c2 a#1 - a#1 - g#1]
+    [- g#1 - g#1 g1 - g1 -] [c2 - c2 a#1 - a#1 - g#1]
+    [- g#1 - g#1 g1 - g1 -] [c2 - c2 a#1 - a#1 - g#1]
+    [- g#1 d#2 f2 g2 f2 a#1 d2] [g#1 - d#2 g#1 a#1 f2 a#1 c2]
+    [- c2 d#2 f2 f2 - f2 a#1] [g#1 - d#2 g#1 a#1 f2 a#1 c2]
+    [- c2 g2 f#2 f2 d#2 c2 a#1] [g#1 - d#2 g#1 a#1 f2 a#1 c2]
+    [- c2 d#2 f2 f2 - f2 a#1] [g#1 - d#2 g#1 a#1 f2 a#1 c2]
+    [- c2 g2 f#2 f2 d#2 c2 a#1] [g#1 - d#2 g#1 a#1 f2 a#1 c2]
+    [- c2 d#2 f2 f2 - f2 a#1] [g#1 - d#2 g#1 a#1 f2 a#1 c2]
+    [- c2 g2 f#2 f2 d#2 c2 a#1] [g#1 - d#2 g#1 a#1 f2 a#1 c2]
+    [- c2 d#2 f2 f2 - f2 a#1] [g#1 - d#2 g#1 a#1 f2 a#1 b1]
+    [- f2 d2 d#2 g2 g1 b1 d2] [g#1 - d#2 g#1 a#1 f2 a#1 c2]
+    [- c2 g2 c2 f2 d#2 d2 a#1] [g#1 - d#2 g#1 b1 g1 b1 c2]
+    [- c2 a#1 a#1 g#1 g#1 g1 g1] [g#1 - d#2 g#1 a#1 f2 a#1 c2]
+    [- c2 g2 c2 f2 d#2 d2 c2] [g#1 - d#2 g#1 b1 g1 b1 c2]
+    [- c2 d2 d2 d#2 d#2 g2 g2] [g#1 - d#2 g#1 a#1 f2 a#1 c2]
+    [- c2 g2 c2 f2 d#2 d2 c2] [g#1 - d#2 g#1 b1 g1 b1 c2]
+    [- c2 a#1 a#1 g#1 g#1 g1 g1] [g#1 - d#2 g#1 a#1 f2 a#1 c2]
+    [- c2 g2 c2 f2 d#2 d2 c2] [g#1 - d#2 g#1 b1 g1 b1 c2]
+    [- c2 d2 d2 d#2 f#2 g2 g1] g#1
+    a#1 c2
+    - g#1
+    a#1 c2
+    [- - - - - c2 f2 g2] [g#2 - c3 g#2 d#3 d3 c3 a#2]
+    [- f2 a#2 f2 a#1 d#2 f2 a#2] [c3 - d#3 c3 a#2 g2 a#2 c3]
+    [- c3 a#2 g2 f#2 f2 d#2 c2] [g#1 - g#1 d#2 - g#1 d#2 a#1]
+    [- a#1 f2 a#1 b1 d2 f2 a#2] [c3 b2 a#2 g2 - f#2 f2 c2]
+    [- d#2 f2 f#2 g2 g1 a#1 b1]>`)
+  .sound("crow").gain(0.3).punchcard().color("#003049")
+
+$: note(`<
+    - [[g3,c4] [g3,c4] - - [a#3,d#4,g4] [a#3,d#4,g4] - [c4,f4]]
+    [- [c4,f4] - [d4,g4] - [d4,g4] [c4,f4] [d4,g4]] [[g4,c5] [f4,a#4] - [d4,g4] - [d4,f#4] - [c4,f4]]
+    [- [a#3,d#4] - [g3,c4] [f3,a#3] - [g3,b3] -] [[g3,c4] [g3,c4] - - [a#3,d#4] [a#3,d#4] - [c4,f4]]
+    [- [c4,f4] - [d4,g4] - [d4,g4] [c4,f4] [d4,g4]] [[g3,c4] [g3,c4] - - [a#3,d#4] [a#3,d#4] - [c4,f4]]
+    [- [c4,f4] - [d4,g4] - [c4,f4] [d4,g4] [a#3,d4]] [[g#3,d#3] [g#3,d#3] - - [g3,c4] [g3,c4] - [a3,d4]]
+    [- [a#3,d#4] - [c4,f4] - [c4,f4] [c4,f4] [c#4,f#4]] [[d4,g4] [d4,g4] - [f4,a#4] - [a#4,d5] - [d5,b4]]
+    [- [d5,b4] - [d4,g4] - g4 f4 b3] [[g3,c4] [g3,c4] - - [a#3,d#4] [a#3,d#4] - [c4,f4]]
+    [- [c4,f4] - [d4,g4] - [d4,g4] [c4,f4] [d4,g4]] [[g3,c4] [g3,c4] - - [a#3,d#4] [a#3,d#4] - [c4,f4]]
+    [- [c4,f4] - [d4,g4] - [c4,f4] [d4,g4] [a#3,d4]] [[g#3,d#3] [g#3,d#3] - - [g3,c4] [g3,c4] - [a3,d4]]
+    [- [a#3,d#4] - [c4,f4] - [c4,f4] [c4,f4] [c#4,f#4]] [[d4,g4] [d4,g4] - [f4,a#4] - [a#4,d5] - [d5,b4]]
+    [- [d5,b4] - [d4,g4] - g4 f4 b3] [[c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] - [a#2,f3,a#3] - [g#2,d#3,g#3]]
+    [- [g#2,d#3,g#3] - [g#2,d#3,g#3] [g2,d3,g3] - [g2,d3,g3] -] [[c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] - [a#2,f3,a#3] - [g#2,d#3,g#3]]
+    [- [g#2,d#3,g#3] - [g#2,d#3,g#3] [g2,d3,g3] - [g2,d3,g3] -] [[c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] - [a#2,f3,a#3] - [g#2,d#3,g#3]]
+    [- [g#2,d#3,g#3] - [g#2,d#3,g#3] [g2,d3,g3] - [g2,d3,g3] -] [[c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] - [a#2,f3,a#3] - [g#2,d#3,g#3]]
+    [- [g#2,d#3,g#3] - [g#2,d#3,g#3] [g2,d3,g3] - [g2,d3,g3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [c3,g3,c4]]
+    [- [c3,g3,c4] - [c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [c3,g3,c4]]
+    [- [c3,g3,c4] - [c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [c3,g3,c4]]
+    [- [c3,g3,c4] - [c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [c3,g3,c4]]
+    [- [c3,g3,c4] - [c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [c3,g3,c4]]
+    [- [c3,g3,c4] - [c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [c3,g3,c4]]
+    [- [c3,g3,c4] - [c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [c3,g3,c4]]
+    [- [c3,g3,c4] - [c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [b2,f3,b3]]
+    [- [b2,f3,b3] - [f3,b3,f4] - [d4,f4] [g4,d4] f4] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [c4,g3,c3] [c4,c3,g3] - - [c4,g3,c3] [c4,c3,g3]] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [a#3,f3,a#2] [a#3,f3,a#2] [g#3,d#3,g#2] [g#3,d#3,g#2] [g3,d3,g2] [g3,d3,g2]] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [c4,g3,c3] [c4,c3,g3] - [c4,c3,g3] [a#3,a#2,f3] [a#3,a#2,f3]] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [d4,a3,d3] [d4,a3,d3] [d#4,a#3,d#3] [d#4,a#3,d#3] [g3,g4] [g3,f4]] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [c4,g3,c3] [c4,c3,g3] - [c4,c3,g3] [c4,g3,c3] [c4,c3,g3]] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [a#3,f3,a#2] [a#3,f3,a#2] [g#3,d#3,g#2] [g#3,d#3,g#2] [g3,d3,g2] [g3,d3,g2]] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [c4,g3,c3] [c4,c3,g3] - [c4,c3,g3] [a#3,a#2,f3] [a#3,a#2,f3]] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [d4,a3,d3] [d4,a3,d3] [a#3,d#4,d#3] [a#3,d#4,d#3] g4 -] c5
+    - -
+    - -
+    - -
+    - [[g#3,g#2,d#3] [g#3,d#3,g#2] [g#3,d#3,g#2] [g#3,g#2,d#3] - - [g#3,d#3,g#2] [a#3,a#2,f3]]
+    [- - [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2]] [[c4,c3,g3] [c4,g3,c3] [c4,g3,c3] [c4,c3,g3] - - [c4,g3,c3] [c4,c3,g3]]
+    [- - [a#3,f3,a#2] [a#3,f3,a#2] [g#3,d#3,g#2] [g#3,d#3,g#2] [g3,d3,g2] [g3,d3,g2]] [[g#3,g#2,d#3] [g#3,d#3,g#2] [g#3,d#3,g#2] [g#3,g#2,d#3] - - [g#3,d#3,g#2] [a#3,a#2,f3]]
+    [- - [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2]] [[c4,c3,g3] [c4,g3,c3] [c4,g3,c3] [c4,c3,g3] - - [c4,g3,c3] [c4,c3,g3]]
+    [- - [c4,g3,c3] [c4,g3,c3] [c4,g3,c3] [c4,g3,c3] [c4,g3,c3] [c4,g3,c3]]>`)
+  .sound("gm_overdriven_guitar:1").gain(0.3).punchcard().color("#003049")
+
+$: note(`<
+    - [[g3,c4] [g3,c4] - - [a#3,d#4,g4] [a#3,d#4,g4] - [c4,f4]]
+    [- [c4,f4] - [d4,g4] - [d4,g4] [c4,f4] [d4,g4]] [[g4,c5] [f4,a#4] - [d4,g4] - [d4,f#4] - [c4,f4]]
+    [- [a#3,d#4] - [g3,c4] [f3,a#3] - [g3,b3] -] [[g3,c4] [g3,c4] - - [a#3,d#4] [a#3,d#4] - [c4,f4]]
+    [- [c4,f4] - [d4,g4] - [d4,g4] [c4,f4] [d4,g4]] [[g3,c4] [g3,c4] - - [a#3,d#4] [a#3,d#4] - [c4,f4]]
+    [- [c4,f4] - [d4,g4] - [c4,f4] [d4,g4] [a#3,d4]] [[g#3,d#3] [g#3,d#3] - - [g3,c4] [g3,c4] - [a3,d4]]
+    [- [a#3,d#4] - [c4,f4] - [c4,f4] [c4,f4] [c#4,f#4]] [[d4,g4] [d4,g4] - [f4,a#4] - [a#4,d5] - [d5,b4]]
+    [- [d5,b4] - [d4,g4] - g4 f4 b3] [[g3,c4] [g3,c4] - - [a#3,d#4] [a#3,d#4] - [c4,f4]]
+    [- [c4,f4] - [d4,g4] - [d4,g4] [c4,f4] [d4,g4]] [[g3,c4] [g3,c4] - - [a#3,d#4] [a#3,d#4] - [c4,f4]]
+    [- [c4,f4] - [d4,g4] - [c4,f4] [d4,g4] [a#3,d4]] [[g#3,d#3] [g#3,d#3] - - [g3,c4] [g3,c4] - [a3,d4]]
+    [- [a#3,d#4] - [c4,f4] - [c4,f4] [c4,f4] [c#4,f#4]] [[d4,g4] [d4,g4] - [f4,a#4] - [a#4,d5] - [d5,b4]]
+    [- [d5,b4] - [d4,g4] - g4 f4 b3] [[c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] - [a#2,f3,a#3] - [g#2,d#3,g#3]]
+    [- [g#2,d#3,g#3] - [g#2,d#3,g#3] [g2,d3,g3] - [g2,d3,g3] -] [[c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] - [a#2,f3,a#3] - [g#2,d#3,g#3]]
+    [- [g#2,d#3,g#3] - [g#2,d#3,g#3] [g2,d3,g3] - [g2,d3,g3] -] [[c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] - [a#2,f3,a#3] - [g#2,d#3,g#3]]
+    [- [g#2,d#3,g#3] - [g#2,d#3,g#3] [g2,d3,g3] - [g2,d3,g3] -] [[c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] - [a#2,f3,a#3] - [g#2,d#3,g#3]]
+    [- [g#2,d#3,g#3] - [g#2,d#3,g#3] [g2,d3,g3] - [g2,d3,g3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [c3,g3,c4]]
+    [- [c3,g3,c4] - [c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [c3,g3,c4]]
+    [- [c3,g3,c4] - [c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [c3,g3,c4]]
+    [- [c3,g3,c4] - [c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [c3,g3,c4]]
+    [- [c3,g3,c4] - [c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [c3,g3,c4]]
+    [- [c3,g3,c4] - [c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [c3,g3,c4]]
+    [- [c3,g3,c4] - [c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [c3,g3,c4]]
+    [- [c3,g3,c4] - [c3,g3,c4] - [c3,g3,c4] [a#2,f3,a#3] -] [[g#2,d#3,g#3] [g#2,d#3,g#3] - - [a#2,f3,a#3] [a#2,f3,a#3] - [b2,f3,b3]]
+    [- [b2,f3,b3] - [f3,b3,f4] - [d4,f4] [g4,d4] f4] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [c4,g3,c3] [c4,c3,g3] - - [c4,g3,c3] [c4,c3,g3]] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [a#3,f3,a#2] [a#3,f3,a#2] [g#3,d#3,g#2] [g#3,d#3,g#2] [g3,d3,g2] [g3,d3,g2]] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [c4,g3,c3] [c4,c3,g3] - [c4,c3,g3] [a#3,a#2,f3] [a#3,a#2,f3]] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [d4,a3,d3] [d4,a3,d3] [d#4,a#3,d#3] [d#4,a#3,d#3] [g3,g4] [g3,f4]] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [c4,g3,c3] [c4,c3,g3] - [c4,c3,g3] [c4,g3,c3] [c4,c3,g3]] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [a#3,f3,a#2] [a#3,f3,a#2] [g#3,d#3,g#2] [g#3,d#3,g#2] [g3,d3,g2] [g3,d3,g2]] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [c4,g3,c3] [c4,c3,g3] - [c4,c3,g3] [a#3,a#2,f3] [a#3,a#2,f3]] [[g#3,g#2,d#3] - [g#3,d#3,g#2] [g#3,d#3,g#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [c4,c3,g3]]
+    [- - [d4,a3,d3] [d4,a3,d3] [a#3,d#4,d#3] [a#3,d#4,d#3] g4 -] c5
+    - -
+    - -
+    - -
+    - [[g#3,g#2,d#3] [g#3,d#3,g#2] [g#3,d#3,g#2] [g#3,g#2,d#3] - - [g#3,d#3,g#2] [a#3,a#2,f3]]
+    [- - [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2]] [[c4,c3,g3] [c4,g3,c3] [c4,g3,c3] [c4,c3,g3] - - [c4,g3,c3] [c4,c3,g3]]
+    [- - [a#3,f3,a#2] [a#3,f3,a#2] [g#3,d#3,g#2] [g#3,d#3,g#2] [g3,d3,g2] [g3,d3,g2]] [[g#3,g#2,d#3] [g#3,d#3,g#2] [g#3,d#3,g#2] [g#3,g#2,d#3] - - [g#3,d#3,g#2] [a#3,a#2,f3]]
+    [- - [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2] [a#3,f3,a#2]] [[c4,c3,g3] [c4,g3,c3] [c4,g3,c3] [c4,c3,g3] - - [c4,g3,c3] [c4,c3,g3]]
+    [- - [c4,g3,c3] [c4,g3,c3] [c4,g3,c3] [c4,g3,c3] [c4,g3,c3] [c4,g3,c3]]>`)
+  .sound("gm_overdriven_guitar:2").gain(0.3).punchcard().color("#003049")
+
+$: note(`<
+    - [c5 c5 - - d#5 d#5 - f5]
+    [- f5 - g5 - g5 f5 g5] [c6 a#5 - g5 - f#5 - f5]
+    [- d#5 - c5 a#4 - b4 -] [c5 - - - - - - - - - - - a#4 g#4 g4 f4 d#4 d4 c4 a#3 g#3 g3 f3 d#3 d3 c3 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -]
+    - -
+    - -
+    - -
+    [- - - - - g4 a#4 b4] [c5 - - - - - - - - - - - a#4 g#4 g4 f4 d#4 d4 c4 a#3 g#3 g3 f3 d#3 d3 c3 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -]
+    - -
+    - -
+    - -
+    [- - - - - g4 a#4 b4] [c5 - c5 c5 - c5 - c5]
+    [- c5 - c5 b4 - b4 -] [c5 - c5 c5 - c5 - c5]
+    [- c5 - c5 c5 - d5 -] [c5 - c5 c5 - c5 - c5]
+    [- c5 - c5 b4 - b4 -] [c5 - c5 c5 - c5 - c5]
+    [- c5 - c5 c5 - d5 -] [c5 - - - - - - - - - - - a#4 g#4 g4 f4 d#4 d4 c4 a#3 g#3 g3 f3 d#3 d3 c3 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -]
+    - -
+    [- - - - - - f4 g4] [c5 - - - - - - - - - - - a#4 g#4 g4 f4 d#4 d4 c4 a#3 g#3 g3 f3 d#3 d3 c3 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -]
+    - -
+    [- - - - - g4 a#4 b4] [c5 - - - - - - - - - - - a#4 g#4 g4 f4 d#4 d4 c4 a#3 g#3 g3 f3 d#3 d3 c3 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -]
+    - -
+    [- - - - - - f4 g4] [c5 - - - - - - - - - - - a#4 g#4 g4 f4 d#4 d4 c4 a#3 g#3 g3 f3 d#3 d3 c3 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -]
+    - -
+    [- - - - - d4 d#4 f4] [g4 - g4 g4 - f4 a#4 g#4]
+    [g4 - d#4 f4 - d#4 d4 d#4] [c4 - - g4 - f4 b4 c5]
+    g4 [g4 - - g4 - f4 a#4 g#4]
+    [g4 - c5 c5 - c5 d5 d#5] [c5 - - - - - - - - - - - - - - - - - - - - - - f5 f#5 g5 - - - - - - - - - - - - - - f5 - - - - - - - d5 - - - - - - - b4 - - - - - - -]
+    [c5 - - - - d4 d#4 f4] [g4 - g4 g4 - f4 a#4 g#4]
+    [g4 - d#4 f4 - d#4 d4 d#4] [c4 - - g4 - f4 b4 c5]
+    g4 [g4 - - g4 - f4 a#4 g#4]
+    [g4 - c5 c5 - c5 d5 d#5] [c5 - - - - - - - - - - - - - - - - - - - - - - f5 f#5 g5 - - - - - - - - - - - - - - f5 - - - - - - - d5 - - - - - - - b4 - - - - - - -]
+    c5 -
+    - -
+    - -
+    - -
+    - -
+    - -
+    [- c5 d5 d#5 d5 c5 a#4 -] c5
+    [d#5 - - d5 - - a#4 -] c5
+    [- - - - - g3 a#3 b3]>`)
+  .sound("gm_trumpet").gain(1.2).punchcard().color("#fdf0d5")
+
+$: note(`<
+    - -
+    - -
+    - [- g3 c4 g3 d4 d#4 - g3]
+    [- g3 c4 g3 d4 d#4 - g3] [g3 g3 c4 g3 d4 d#4 - f4]
+    [- f4 d#4 - d4 d#4 - d4] [- g3 c4 g3 d4 d#4 - g3]
+    [- g3 c4 g3 d4 d#4 - g3] [g3 g3 c4 g3 d4 d#4 - f4]
+    [- f4 d#4 - d4 d#4 - -] [- g3 c4 g3 d4 d#4 - g3]
+    [- g3 c4 g3 d4 d#4 - g3] [g3 g3 c4 g3 d4 d#4 - f4]
+    [- f4 d#4 - d4 d#4 - d4] [- g3 c4 g3 d4 d#4 - g3]
+    [- g3 c4 g3 d4 d#4 - g3] [g3 g3 c4 g3 d4 d#4 - f4]
+    [- f4 d#4 - d4 d#4 - f4] [g4 - d#4 c4 - a#3 c4 d#4]
+    [- c4 d#4 f4 f#4 f4 d4 c5] [- a#4 - g4 f#4 f4 d#4 c4]
+    [- a#3 c4 g3 f#3 f3 d3 -] [c3 - d#3 c3 f3 d#3 f3 g3]
+    [- f3 g3 a#3 - g3 b3 -] [c4 - a#3 c4 d#4 c4 d#4 f4]
+    [f#4 - - - f#4 - - - f4 d#4 d4 - c4 - b3 -] [c4 - - g3 a#3 c4 g3 f3]
+    [- d#3 d3 d#3 - d#3 - g3] [c4 - c4 g3 a#3 c4 g3 f3]
+    [- g3 - c4 - c4 c4 d4] [d#4 - - g3 a#3 c4 d4 d#4]
+    [- d4 - d#4 - d#4 d#4 f4] [d#4 - - g3 a#3 c4 d4 d4]
+    [- d#4 d4 c4 - g3 a#3 b3] [c4 - - g3 a#3 c4 g3 f3]
+    [- d#3 d3 d#3 - d#3 - g3] [c4 - c4 g3 a#3 c4 g3 f3]
+    [- g3 - c4 - c4 c4 d4] [d#4 - - g3 a#3 c4 d4 d#4]
+    [- d4 - d#4 - d#4 d#4 f4] [f4 - - c4 a#3 c4 f4 d4]
+    [- d4 d#4 f4 g4 f4 d#4 d4] [c4 - c4 c4 - d4 g4 d#4]
+    [c4 - g3 a#3 - g3 f3 g3] [g3 - - d#4 - d4 d#4 g4]
+    [d#4 d#4 d4 d4 c4 c4 a#3 a#3] [c4 - c4 c4 - d4 g4 d#4]
+    [c4 - g4 g4 - g4 f4 d4] [d#4 - d#4 d#4 - d4 f4 d4]
+    [d#4 d#4 f4 f4 g4 g3 a#3 b3] [c4 - c4 c4 - d4 g4 d#4]
+    [c4 - g3 a#3 - g3 f3 g3] [g3 - - d#4 - d4 d#4 g4]
+    [d#4 d#4 d4 d4 c4 c4 a#3 a#3] [c4 - c4 c4 - d4 g4 d#4]
+    [c4 - g4 g4 - g4 f4 d4] [d#4 - d#4 d#4 - d4 f4 g4]
+    [c5 a#4 g4 f#4 f4 d#4 c4 a#3] c4
+    - -
+    - -
+    - -
+    [- c4 d4 d#4 d4 c4 a#3 d4] [c4 - c4 c4 - c4 c4 c4]
+    [d#4 - d#4 d4 - d4 a#3 a#3] [g4 - g4 g4 g4 g4 f4 d#4]
+    [- g3 g3 g3 g3 g3 g3 g3] d#3
+    [g3 - - f3 - - d3 -] d#3>`)
+  .sound("gm_alto_sax").gain(2).punchcard().color("#c1121f")
+
+$: note(`<
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - g4>`)
+  .sound("gm_alto_sax").gain(2).punchcard().color("#c1121f")
+
+$: note(`<
+    - [[g4,c5,d#4] [g4,c5,d#4] - - [a#4,d#5,g4] [a#4,d#5,g4] - [c5,f5,a4]]
+    [- [c5,f5,a4] - [d5,g5,b4] - [d5,g5,b4] [c5,f5,a4] [d5,g5,b4]] [[g5,c6,d#5] [f5,a#5,d5] - [d5,g5,a#4] - [d5,f#5,a#4] - [c5,f5,a4]]
+    [- - - - - - - - [a#4,d#5,g4] - - - - - - - - - - - - - - - [g4,c5,d#4] - - - - - - - [f4,a#4,d4] - - - - - - - - - - - - - - - [e7,g4,b4,d#4] d7 c7 b6 a6 g6 f6 e6 d6 c6 b5 a5 g5 - - -] [[f5,e5,d5,g4,c5,d#4] - [g4,c5,d#4] - - - - - [d#5,a#4] g4 [a#4,d#5] - - - [c5,f5,a4,f6] -]
+    [- [c5,f5,a4,f6] - [d5,g5,b4] - [d5,g5,b4] [c5,f5,a4] [d5,g5,b4]] [[g4,c5,d#4] - [g4,c5,d#4] - - - - - [a#4,d#5] g4 [a#4,d#5] - - - [c5,f5,a4,f6] -]
+    [- [c5,f5,a4,f6] - [d5,g5,a#4] - [c5,f5,a4] [d5,g5,a#4] [a#4,d5,g4]] [[d#4,g#4,c4] - [d#4,g#4,c4] - - - - - [g4,c5] d#4 [g4,c5] - - - [a#4,d5] -]
+    [- - - g4 [a#4,d#5] - - - - - - - [c5,f5,a4] - - - - - - - [c5,f5,a4] - - - [c5,f5,a4] - - - [c#5,f#5,a#4] - - -] [[d5,g5,b4,b5] [d5,g5,b4,b5] - [f5,a#5,d5] c5 [f5,a#5,d5] - [f5,b5,d5]]
+    [- [f5,b5,d5] d#5 [d5,g5,b4] - d#5 d#5 d#5] [[g4,c5,d#5] - [g4,c5,d#4] - - - - - [d#5,a#4] g4 [a#4,d#5] - - - [c5,f5,a4,f6] -]
+    [- [c5,f5,a4,f6] - [d5,g5,b4] - [d5,g5,b4] [c5,f5,a4] [d5,g5,b4]] [[g4,c5,d#4] - [g4,c5,d#4] - - - - - [a#4,d#5] g4 [a#4,d#5] - - - [c5,f5,a4,f6] -]
+    [- [c5,f5,a4,f6] - [d5,g5,a#4] - [c5,f5,a4] [d5,g5,a#4] [a#4,d5,g4]] [[d#4,g#4,c4] - [d#4,g#4,c4] - - - - - [g4,c5] d#4 [g4,c5] - - - [a#4,d5] -]
+    [- - - g4 [a#4,d#5] - - - - - - - [c5,f5,a4] - - - - - - - [c5,f5,a4] - - - [c5,f5,a4] - - - [c#5,f#5,a#4] - - -] [[d5,g5,b4,b5] [d5,g5,b4,b5] - [f5,a#5,d5] c5 [f5,a#5,d5] - [f5,b5,d5]]
+    [- [f5,b5,d5] d#5 [d5,g5,b4] - [g5,d5] [f5,a#5] [f#5,d5,b5]] [[d#5,g5,c6] - [d#5,g5,c6] [d5,f5,c6] - [d5,f5,c6] - [d#5,g#5,c6]]
+    [- [d#5,g#5,c6] - [d#5,g#5,c6] [d5,g5,b5] - [d5,g5,b5] -] [[d#5,g5,c6] - [d#5,g5,c6] [d5,f5,c6] - [d5,f5,c6] - [d#5,g#5,c6]]
+    [- [d#5,g#5,c6] - [d#5,g#5,c6] [d5,g5,c6] - [g5,b5,d6] -] [[d#5,g5,c6] - [d#5,g5,c6] [d5,f5,c6] - [d5,f5,c6] - [d#5,g#5,c6]]
+    [- [d#5,g#5,c6] - [d#5,g#5,c6] [d5,g5,b5] - [d5,g5,b5] -] [[d#5,g5,c6] - [d#5,g5,c6] [d5,f5,c6] - [d5,f5,c6] - [d#5,g#5,c6]]
+    [- [d#5,g#5,c6] - [d#5,g#5,c6] [c6,g5,d5] [b5,b4] [g5,g4] d4] [[c5,d#4] g#4 - c5 [g#4,d#4] - - - - - - - - - - - [a#4,d5,f4,c6] - - - [a#4,c5,f4,c6] - - - d5 - - - [g4,d#5] - - -]
+    [- [c5,d#4,g4] - [c5,d#5,g4] - [c5,d#5,g4,c6] [a#4,f4,c6,d5,d#4] -] [[c5,d#4] g#4 - c5 [g#4,d#4] - - - - - - - - - - - [a#4,d5,f4,c6] - - - [a#4,c5,f4,c6] - - - d5 - - - [g4,d#5] - - -]
+    [- [c5,d#5,g4] - [c5,d#5,g4] - [c5,d#5,g4] [d5,a#4,f5] [d5,f5]] [[c5,d#4] g#4 - c5 [g#4,d#4] - - - - - - - - - - - [a#4,d5,f4,c6] - - - [a#4,d5,f4,c6] - - - - - - - [g4,d#5] - - -]
+    [- [c5,d#4,g4] - [c5,d#5,g4] - [c5,d#5,g4,c6] [a#4,f4,c6,d5,d#4] -] [[c5,d#4] g#4 - c5 [g#4,d#4] - - - - - - - - - - - [a#4,d5,f4,c6] - - - [a#4,d5,f4,c6] - - - - - - - [g4,d#5] - - -]
+    [- [c5,d#4,g4] - [c5,d#5,g4,c6] - [c5,d#5,g4,c6] [a#5,d5,f5,a#4,f4] b5] [[c5,d#4,c6] g#4 - c5 [g#4,d#4] - - - - - - - - - - - [a#4,d5,f4,c6] - - - [a#4,c5,f4,c6] - - - d5 - - - [g4,d#5] - - -]
+    [- [c5,d#4,g4] - [c5,d#5,g4] - [c5,d#5,g4,c6] [a#4,f4,c6,d5,d#4] -] [[c5,d#4] g#4 - c5 [g#4,d#4] - - - - - - - - - - - [a#4,d5,f4,c6] - - - [a#4,c5,f4,c6] - - - d5 - - - [g4,d#5] - - -]
+    [- [c5,d#5,g4] - [c5,d#5,g4] - [c5,d#5,g4] [d5,a#4,f5] [d5,f5]] [[c5,d#4] g#4 - c5 [g#4,d#4] - - - - - - - - - - - [a#4,d5,f4,c6] - - - [a#4,d5,f4,c6] - - - - - - - [g4,d#5] - - -]
+    [- [c5,d#4,g4] - [c5,d#5,g4] - [c5,d#5,g4,c6] [a#4,f4,c6,d5,d#4] -] [[c5,d#4] g#4 - c5 [g#4,d#4] - - - - - - - - - - - [a#4,d5,f4,c6] - - - [a#4,d5,f4,c6] - - - - - - - [d5,f5,b4] - - -]
+    [- d5 [d#5,c5,g4] f5 [d#5,g5,c5,g4] g#5 [d#5,a#5,g5] [c6,d5,f5]] [[d#5,g5,c6] c5 [c6,d#5,g5] [c5,c6] [d5,f5,a#5] g5 [a#5,f5,d5] [g5,c6,d#5]]
+    [- c5 d#5 f5 [f#5,d#5,c5] g5 [d5,f5,a#4] d#5] [[c5,g3] - - - - - - - d#5 - - - - - - - g5 - - - - - - - g#5 - - - - - - - [d5,b5] g5 - - - - - - d6 - - - - - - - f6 - - - - - - - [d#6,g6,c6] - - - - - - -]
+    [g6 g6 d#6 c6 [g5,d#5,c5] d#5 [c5,g4] g4] [[c5,g4,d#4] d#5 [g5,d#5,g4] c6 [a#5,d5,f5] g5 f5 [d#5,c5]]
+    [- c5 d#5 [f5,g6] [f#5,d#5,c5] g5 [f#5,d5,a#4] g5] [[g5,c5,d#5] - g6 [g5,c6,d#5] [g5,b5,d5] g5 b5 [g5,c6,d#5]]
+    [g6 [c6,g6] [d#6,g6] [f6,g6] [f#6,g6] g6 [g5,b5,d6] [b5,g5]] [[d#5,g5,c6] c5 [c6,d#5,g5] [c5,c6] [d5,f5,a#5] g5 [a#5,f5,d5] [g5,c6,d#5]]
+    [- c5 d#5 f5 [f#5,d#5,c5] g5 [d5,f5,a#4] d#5] [[c5,g3] - - - - - - - d#5 - - - - - - - g5 - - - - - - - g#5 - - - - - - - [d5,b5] g5 - - - - - - d6 - - - - - - - f6 - - - - - - - [d#6,g6,c6] - - - - - - -]
+    [g6 g6 d#6 c6 [g5,d#5,c5] d#5 [c5,g4] g4] [[c5,g4,d#4] d#5 [g5,d#5,g4] c6 [a#5,d5,f5] g5 f5 [d#5,c5]]
+    [- c5 d#5 [f5,g6] [f#5,d#5,c5] g5 [f#5,d5,a#4] g5] [[g5,c5,d#5] - - - - - - - - - - - - - - - g6 - - - - - - g5 [c6,d#5] - - - - - - - [g5,b5,d5] - - - - - - - g5 - - - - - - - b5 - - - - - - - [g5,c6,d#5] - - - - - - -]
+    [g6 [c6,g6] [d#6,g6] [f6,g6] [f#6,g6] g6 [g5,b5,d6] [b5,g5]] [g5,c6,d#5]
+    [[d6,g5,c6] d#6 - - - - - - - - - - - - - - - - - - - - - - [g5,a#5,d6] - - - - - - - - - - - - - - - - - - - - - - - [d5,g5,a#5] - - - - - - - - - - - - - - -] [[d#5,g5,c6] - - - - - [c5,f5] [c5,f5,a#5]]
+    [- [d#5,g5,c5] - - - - - -] [g5,c6,d#5]
+    [[d6,g5,c6] d#6 - - - - - - - - - - - - - - - - - - - - - - [g5,a#5,d6] - - - - - - - - - - - - - - - - - - - - - - - [d5,g5,a#5] - - - - - - - - - - - - - - -] [[d#5,g5,c6] - - - - - [d#5,g5,a#5] [d#5,g5,c6]]
+    [- - - - - - - a#5 [g5,c6,d#6] - g6 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -] [g#4 - - - - - - - [g5,d#5,c6] - - - - - - - g#4 - - - - - - - [c6,g#5,f6] - - - - - - - g#4 - - - - - - - [c6,d#6] g6 - - - - - - g#4 - - - - - - - [c6,g5,d#5] - - - - - - -]
+    [[d#6,c6,g5] d6 g5 [a#5,f5,d6] a#5 f5 [d#5,c5,g4] d5] [[d#5,c5,g4] f5 g5 [g4,d#4,c5] - d5 d#5 [d#4,c5,g5]]
+    [- a#4 c5 g5 [c5,d#4] d5 [d#5,g4] a#4] [g#4 - - - - - - - [g#4,d#4,c5] - - - - - - - - - - - - - - - [c5,g#4,d#4,f5] - - - - - - - a#4 - - - - - - - [c5,d#5,d#4] g5 - - - - - - [g#4,c5] - - - - - - - [d#5,d#4,g4,a#4] - - - - - - -]
+    [[d#4,d#5] f5 g5 [f5,d5] g5 a#5 [a#4,f5,d5] g5] [[d#5,g4,d#4] f5 g5 [c5,g4,d#4] - g5 a#5 [g5,d#5,c6]]
+    [- [d#5,d#4] [f5,f4] [f#5,f#4] [g5,g4] [g5,g4] [a#4,a#3] [b4,b3]]>`)
+  .sound("piano").punchcard().color("#780000")
+
+$: note(`<
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - -
+    - [[g#3,g#2] c4 d#4 g#4 - d#4 c4 -]
+    [[a#3,a#2] - f4 d4 - g4 a#4 [a#2,a#3]] [[c4,c3] f4 g4 a#4 - c5 [c3,g4] [c3,d#4]]
+    [- [c4,c3] d#4 g4 [g3,g2] c4 g4 a#4] [[g#3,g#2] c4 d#4 g#4 - d#4 - c4]
+    [[a#3,a#2] - f4 d4 - g4 a#4 [a#2,a#3]] [[c4,c3] f4 g4 a#4 - c5 g4 d#4]
+    [[c4,c3] - d#4 - f4 - g4 - a#4 - c5 d5 c5 - g4 -]>`)
+  .sound("piano").punchcard().color("#780000")
+
+$: note(`<
+    - [[b1,f#2] b1 [d2,a#2] d2 [b1,f#2] b1 [d2,a#2] b1]
+    [f#2 - b1 - [d2,a#2] - d2 - [b1,f#2] - b1 - [d2,a#2,b1] - d2 d2] [[b1,d2,f#2,a3] - - b1 - b1 [d2,a#2] [b1,a2]]
+    [f#2 - [b1,g2] - [d2,a#2] - b1 b1 [b1,d2,f#2,c#3] d2 d2 d2 [b1,d2,a#2] d2 d2 d2] [[b1,f#2,a3] b1 [d2,a#2] d2 [b1,f#2] b1 [d2,a#2] b1]
+    [f#2 b1 [d2,a#2] d2 [b1,f#2] b1 [d2,a#2] -] [[f#2,b1] b1 [a#2,d2] d2 [f#2,b1] b1 [a#2,d2] b1]
+    [f#2 b1 [a#2,d2] d2 [f#2,b1] b1 [a#2,d2] -] [[f#2,b1] b1 [a#2,d2] d2 [f#2,b1] b1 [a#2,d2] b1]
+    [f#2 b1 [a#2,d2] d2 [f#2,b1] b1 [a#2,d2] -] [[f#2,b1] b1 [a#2,d2] d2 [f#2,b1] b1 [a#2,d2] b1]
+    [f#2 - b1 - [a#2,d2] - d2 - [f#2,b1] - [b2,b1] b2 [a2,a#2,d2] - c3 a2] [[f#2,a3,b1] b1 [a#2,d2] d2 [f#2,b1] b1 [a#2,d2] b1]
+    [f#2 b1 [a#2,d2] d2 [f#2,b1] b1 [a#2,d2] -] [[f#2,b1] b1 [a#2,d2] d2 [f#2,b1] b1 [a#2,d2] b1]
+    [f#2 b1 [a#2,d2] d2 [f#2,b1] b1 [a#2,d2] -] [[f#2,b1] b1 [a#2,d2] d2 [f#2,b1] b1 [a#2,d2] b1]
+    [f#2 b1 [a#2,d2] d2 [f#2,b1] b1 [a#2,d2] -] [[f#2,b1] b1 [a#2,d2] d2 [f#2,b1] b1 [a#2,d2] b1]
+    [[f#2,b1] b1 [a#2,d2] d2 [f#2,b1] [a2,b1] [a#2,d2] b2] [[b1,f#2,g2,a3] g2 [d2,a#2] a2 [b1,f#2,c3] [b1,a2] [d2,a#2] [b1,a2]]
+    [[f#2,g2] [b1,g2] [d2,a#2] [b1,b2] [b1,a2,c#3] - [d2,c#3] -] [[b1,f#2,g2,a3] g2 [d2,a#2] a2 [b1,f#2,b2] [b1,a2] [d2,a#2] [b1,a2]]
+    [[f#2,g2] [b1,g2] [d2,a#2] [b1,b2] [b1,a2,c#3] - [d2,c#3] -] [[b1,f#2,g2,a3] g2 [d2,a#2] a2 [b1,f#2,b2] [b1,a2] [d2,a#2] [b1,a2]]
+    [[f#2,g2] [b1,g2] [d2,a#2] [b1,b2] [b1,a2,c#3] - [d2,c#3] -] [[b1,f#2,g2,a3] g2 [d2,a#2] a2 [b1,f#2,b2] [b1,a2] [d2,a#2] [b1,a2]]
+    [[f#2,g2] [b1,g2] [d2,a#2] [b1,b2] [b1,a2,c#3] - [d2,c#3] -] [[b1,a3] f#2 [d2,f#2] f#2 [b1,f#2] [f#2,b1] [d2,f#2] [b1,f#2]]
+    [f#2 [b1,f#2] [d2,f#2] [b1,f#2] f#2 [b1,f#2] [d2,f#2] f#2] [[b1,f#2] f#2 [d2,f#2] f#2 [b1,f#2] [b1,f#2] [d2,f#2] [b1,f#2]]
+    [f#2 [b1,f#2] [d2,f#2] [d2,f#2] [b1,f#2] [b1,f#2] [d2,f#2] c#3] [[b1,f#2] f#2 [d2,f#2] f#2 [b1,f#2] [f#2,b1] [d2,f#2] [b1,f#2]]
+    [f#2 [b1,f#2] [d2,f#2] [b1,f#2] f#2 [b1,f#2] [d2,f#2] f#2] [[b1,f#2] f#2 [d2,f#2] f#2 [b1,f#2] [b1,f#2] [d2,f#2] [b1,f#2]]
+    [f#2 - [b1,f#2] - [d2,f#2] - [f#2,a2,b1] - [f#2,b2] - [b1,a2,f#2] a2 [d2,f#2] - [b1,f#2,g2] g2] [[a3,b1] f#2 [d2,f#2] f#2 [f#2,b1] [f#2,b1] [d2,f#2] [f#2,b1]]
+    [f#2 [f#2,b1] [d2,f#2] [f#2,b1] f#2 [f#2,b1] [d2,f#2] f#2] [[f#2,b1] f#2 [d2,f#2] f#2 [f#2,b1] [f#2,b1] [d2,f#2] [f#2,b1]]
+    [f#2 [f#2,b1] [d2,f#2] [d2,f#2] [f#2,b1] [f#2,b1] [d2,f#2] c#3] [[f#2,b1] f#2 [d2,f#2] f#2 [f#2,b1] [f#2,b1] [d2,f#2] [f#2,b1]]
+    [f#2 [f#2,b1] [d2,f#2] [f#2,b1] f#2 [f#2,b1] [d2,f#2] f#2] [[f#2,b1] f#2 [d2,f#2] f#2 [f#2,b1] [f#2,b1] [d2,f#2] [a3,b1]]
+    [f#2 [f#2,b1] [d2,f#2] [f#2,b2,b1] [a2,c#3] [f#2,b2,b1] [d2,f#2] [f#2,g2,b1]] [[b1,a3,g2] - [d2,a#2] [d2,b1] [b1,f#2] b1 [d2,a#2] b1]
+    [f#2 b1 [d2,a#2] - [b1,f#2] b1 [d2,a#2] -] [[b1,f#2] - [d2,a#2] b1 [b1,f#2] b1 [d2,a#2] b1]
+    [f#2 b1 [d2,a#2] d2 [b1,f#2] b1 [d2,a#2] -] [[b1,f#2] - [d2,a#2] b1 [b1,f#2] b1 [d2,a#2] b1]
+    [f#2 b1 [d2,a#2] - [b1,f#2] b1 [d2,a#2] -] [[b1,f#2] - [d2,a#2] b1 [b1,f#2] b1 [d2,a#2] b1]
+    [[b1,f#2] - d2 - [b1,a#2] - d2 - [f#2,b2] b2 [g2,b1] - [b1,a2,a#2] - f2 -] [[a3,b1] - [d2,a#2] b1 [f#2,b1] b1 [d2,a#2] b1]
+    [f#2 b1 [d2,a#2] - [f#2,b1] b1 [d2,a#2] -] [[f#2,b1] - [d2,a#2] b1 [f#2,b1] b1 [d2,a#2] b1]
+    [f#2 b1 [d2,a#2] d2 [f#2,b1] b1 [d2,a#2] -] [[f#2,b1] - [d2,a#2] b1 [f#2,b1] b1 [d2,a#2] b1]
+    [f#2 b1 [d2,a#2] - [f#2,b1] b1 [d2,a#2] -] [[f#2,b1] - [d2,a#2] b1 [f#2,b1] b1 [d2,a#2] b1]
+    [[f#2,b1] - [d2,a#2] - [a#2,b1] - [d2,a#2] - [f#2,b2] [b2,g#2] [g2,b1] - [a2,a#2,a#0,b1] - f2 -] [a3 d#3]
+    [d#3 d#3] [d#3 d#3]
+    [d#3 d#3] [d#3 d#3]
+    [d#3 d#3] [d#3 d#3]
+    [d#3 d2 d2 d2 [d2,d#3] d2 d2 d2] [[b1,a3] f#2 [d2,f#2] f#2 [b1,f#2] [b1,f#2] [d2,f#2] [b1,f#2]]
+    [f#2 [b1,f#2] [d2,f#2] [b1,f#2] f#2 [b1,f#2] [d2,f#2] f#2] [[b1,f#2] f#2 [d2,f#2] f#2 [b1,f#2] [b1,f#2] [d2,f#2] [b1,f#2]]
+    [f#2 [b1,f#2] [d2,f#2] [b1,f#2] f#2 [b1,f#2] [d2,f#2] f#2] [[b1,f#2] f#2 [d2,f#2] f#2 [b1,f#2] [b1,f#2] [d2,f#2] [b1,f#2]]
+    [f#2 [b1,f#2] [d2,f#2] [b1,f#2] f#2 [b1,f#2] [d2,f#2] f#2] [[b1,f#2] [d2,f#2] [f#2,b1] [d2,f#2] [d2,f#2] [f#2,b1] [b1,f#2] [d2,a3]]
+    [b1 - [f#2,b1] [f#2,d2] [c#3,d2] [b1,f#2] [d2,f#2] [d2,f#2]]>`)
+  .sound("gm_slap_bass_2").gain(0.7).gain(0.5).punchcard().color("#fdf0d5")
+
+$: sound(`<
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] -
+    - -
+    - -
+    - -
+    - [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]
+    [- rim - bd hh rim bd hh] [- rim - bd hh rim bd hh]>`).gain(0.5).punchcard().color("#669bbc")
+
+    -->
+  </strudel-editor>
+  <div id="playButton"></div>
+  <div class="reimu-container">
+    <img src="" alt="" class="reimu">
+  </div>
+  <h1 class="title">
+    BRAVO, TU ES REIMU
+  </h1>
+  <div class="trivia">
+    Yipee, tu es le personnage principal !! ♀️��<br>
+    Reimu Hakurei est une prêtresse humaine vivant dans le monde de Gensokyo. Son sanctuaire, peu fréquenté et ne
+    recevant que très peu de dons, la pousse à mener une existence simple et sans prétention. Elle passe
+    ainsi une grande partie de son temps à se détendre, boire du thé et profiter du calme ambiant.<br>
+
+    D'un naturel franc et très décontracté, Reimu se lie facilement d'amitié avec les autres habitants de Gensokyo, y
+    compris les yōkai et autres créatures fantastiques.<br>
+
+    Plutôt négligée et peu encline à fournir des efforts inutiles, elle ne s'entraîne presque jamais. Pourtant, elle
+    possède une intuition remarquable pour détecter les incidents - événements assez fréquents à Gensokyo et qui ne se
+    vont pas se résoudrent d'eux-mêmes ! Lorsqu'une nouvelle perturbation survient, malgré son apparente nonchalance,
+    Reimu fait preuve d'une efficacité surprenante pour apaiser les tensions et rétablir l'équillibre.<br>
+
+  </div>
+  <div class="container" id="progressContainer">
+    <h2>
+      Top 5 des résultats !!!1!
+    </h2>
+    <br>
+    <div class="progress-bar" data-total="83">
+      <div class="label">Reimu Hakurei</div>
+      <div class="bar">
+        <div class="segment tooltip" data-value="83" data-tooltip="Questionnaire de base" style="background:#fd4372">
+        </div>
+      </div>
+      <div class="percent">0%</div>
+    </div>
+
+    <div class="progress-bar" data-total="69">
+      <div class="label">Sanae Kochiya</div>
+      <div class="bar">
+        <div class="segment tooltip" data-value="69" data-tooltip="Questionnaire de base" style="background:#76b991">
+        </div>
+      </div>
+      <div class="percent">0%</div>
+    </div>
+
+    <div class="progress-bar" data-total="65">
+      <div class="label">Marisa Kirisame</div>
+      <div class="bar">
+        <div class="segment tooltip" data-value="65" data-tooltip="Questionnaire de base" style="background:#dcd371">
+        </div>
+      </div>
+      <div class="percent">0%</div>
+    </div>
+
+    <div class="progress-bar" data-total="49">
+      <div class="label">Reisen Udongein Inaba</div>
+      <div class="bar">
+        <div class="segment tooltip" data-value="44" data-tooltip="Questionnaire de base" style="background:#c189fd">
+        </div>
+        <div class="segment tooltip" data-value="5" data-tooltip="Question LOL" style="background:#d4acfe">
+        </div>
+      </div>
+      <div class="percent">0%</div>
+    </div>
+
+    <div class="progress-bar" data-total="46">
+      <div class="label">Youmu Konpaku</div>
+      <div class="bar">
+        <div class="segment tooltip" data-value="46" data-tooltip="Questionnaire de base" style="background:#619864">
+        </div>
+      </div>
+      <div class="percent">0%</div>
+    </div>
+  </div>
+
+  <script>
+    window.onbeforeunload = function () {
+      window.scrollTo(0, 0);
+    }
+  </script>
+
+  <script>
+    let button = document.getElementById('playButton');
+    let reimu = document.querySelector(".reimu");
+
+    button.addEventListener('click', () => {
+      const repl = document.getElementById('repl');
+      repl.editor.evaluate();
+      document.body.classList.add("js-zic");
+      reimu.setAttribute("src", "assets/results/reimu.gif");
+      button.remove();
+    });
+  </script>
+
+
+  <script>
+    const container = document.getElementById('progressContainer');
+    let animated = false;
+
+    function isFullyVisible(el) {
+      const rect = el.getBoundingClientRect();
+      return (
+        rect.top >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+      );
+    }
+
+    function animateBars() {
+      if (animated) return;
+
+      console.log(isFullyVisible(container));
+
+      if (isFullyVisible(container)) {
+        animated = true;
+
+        document.querySelectorAll('.progress-bar').forEach(bar => {
+          const total = parseInt(bar.dataset.total);
+          const segments = bar.querySelectorAll('.segment');
+          const percentText = bar.querySelector('.percent');
+
+          let current = 0;
+          let target = total;
+
+          segments.forEach(seg => {
+            const value = parseInt(seg.dataset.value);
+            seg.style.width = value + '%';
+          });
+
+          let counter = 0;
+          const interval = setInterval(() => {
+            if (counter >= target) {
+              clearInterval(interval);
+            } else {
+              counter++;
+              percentText.textContent = counter + '%';
+            }
+          }, 20);
+        });
+      }
+    }
+
+    window.addEventListener('scroll', animateBars);
+  </script>
+  <script>
+    const easterEgg = new Konami(atob("aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj02bjNwRkZQU2xXNA=="))
+  </script>
+
+
+</body>
+
+</html>
