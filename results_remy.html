@@ -141,6 +141,17 @@
       padding-right: 415px;
     }
 
+    .trivia .gif {
+      max-width: 33%;
+    }
+
+    .trivia .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
     h2 {
       font-size: 3rem;
       display: flex;
@@ -604,7 +615,7 @@ $: sound(`<
     BRAVO, TU ES REIMU
   </h1>
   <div class="trivia">
-    Yipee, tu es le personnage principal !! ♀️��<br>
+    Yipee, tu es le personnage principal !! ��♀️<br>
     Reimu Hakurei est une prêtresse humaine vivant dans le monde de Gensokyo. Son sanctuaire, peu fréquenté et ne
     recevant que très peu de dons, la pousse à mener une existence simple et sans prétention. Elle passe
     ainsi une grande partie de son temps à se détendre, boire du thé et profiter du calme ambiant.<br>
@@ -616,7 +627,11 @@ $: sound(`<
     possède une intuition remarquable pour détecter les incidents - événements assez fréquents à Gensokyo et qui ne se
     vont pas se résoudrent d'eux-mêmes ! Lorsqu'une nouvelle perturbation survient, malgré son apparente nonchalance,
     Reimu fait preuve d'une efficacité surprenante pour apaiser les tensions et rétablir l'équillibre.<br>
-
+    <div class="gallery">
+      <img class="gif" src="assets/results/reimupixel.gif">
+      <img class="gif" src="assets/results/reimu-spin.gif">
+      <img class="gif" src="assets/results/reimu-picmix.gif">
+    </div>
   </div>
   <div class="container" id="progressContainer">
     <h2>
