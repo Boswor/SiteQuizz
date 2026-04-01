@@ -195,6 +195,26 @@
       pointer-events: none;
 
     }
+
+    .flex {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .flex img {
+      object-fit: contain;
+      object-position: center;
+      max-width: 50%;
+      max-height: 540px;
+    }
+
+    .flex img:last-child {
+      object-fit: contain;
+      object-position: center;
+      max-width: 30%;
+      max-height: 540px;
+    }
   </style>
 
   <script src="https://unpkg.com/@strudel/repl@latest"></script>
@@ -633,6 +653,25 @@ $: sound(`<
       <img class="gif" src="assets/results/reimu-picmix.gif">
     </div>
   </div>
+
+  <div class="container" id="progressContainer">
+    <h2>
+      Question bonus
+    </h2>
+    <br>
+    <div class="flex">
+      <img src="/assets/results/bonus_remy.jpg" alt="">
+      <img src="/assets/results/apple.jpg" alt="">
+
+    </div>
+    <br>
+    <p>La référence aux pommes fait bien évidemment penser à Apple Girlington, elle est la personnification d'une pomme
+      ! Ce n'est pas un personnage de Touhou officiel mais un OC imaginé par Toby Fox (le gars qui a fait Sans Undertale
+      là), mais comme et ZUN et Toby sont amis elle appraîtra évidemment dans Touhou 24 (info sûre à 100%). En attendant
+      j'ajoute donc 1% de correspondance à Marisa pour la chapeau 🐴</p>
+    <p>*UNTRANSLATABLE JAPANESE IDIOM*</p>
+  </div>
+
   <div class="container" id="progressContainer">
     <h2>
       Top 5 des résultats !!!1!
@@ -656,10 +695,12 @@ $: sound(`<
       <div class="percent">0%</div>
     </div>
 
-    <div class="progress-bar" data-total="65">
+    <div class="progress-bar" data-total="66">
       <div class="label">Marisa Kirisame</div>
       <div class="bar">
         <div class="segment tooltip" data-value="65" data-tooltip="Questionnaire de base" style="background:#dcd371">
+        </div>
+        <div class="segment tooltip" data-value="1" data-tooltip="Question Bonus" style="background:#e6e09b">
         </div>
       </div>
       <div class="percent">0%</div>
